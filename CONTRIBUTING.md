@@ -58,3 +58,35 @@ Whether you submit your PR immediately or after receiving feedback on the Google
 
 5. **Final approval and publishing**
    Once the PR is approved, your post will be published on the CNG blog.
+
+## Event agendas
+
+Event pages can carry a structured agenda in their front matter. It renders as a branded three-column table — time · talk · speaker — via `layouts/partials/agenda.html`, with styling in `assets/css/main.css` (the `.agenda` rules). Authors write data only; there is no HTML or CSS in the content file. `hugo new events/<file>.md` scaffolds the skeleton from `archetypes/events.md`.
+
+The `agenda` key is a list of blocks. Each block has an optional `section` heading (and optional `note`) plus a list of `items`. Each item has an optional `time`, a required `title`, an optional `description` (plain text), and an optional `speakers` list of `{ name, affiliation }`. An item with no `speakers` renders as a muted break row (lunch, coffee, reception); a `speakers` list with more than one entry renders as a panel.
+
+```yaml
+agenda:
+  - section: "Morning session"
+    note: "15-minute talks + 5 minutes Q&A"
+    items:
+      - time: "09:15"
+        title: "A World Without Public Data"
+        description: "An overview of innovations made possible by public data."
+        speakers:
+          - name: "Craig Mills"
+            affiliation: "WRI"
+      - time: "10:30"
+        title: "Coffee break"
+  - section: "Panel discussion"
+    items:
+      - time: "15:00"
+        title: "More is Different"
+        speakers:
+          - name: "David Eaves"
+            affiliation: "University College London"
+          - name: "Jack Kelly"
+            affiliation: "dynamical.org"
+```
+
+Titles, names, and descriptions are emitted as plain text (HTML is escaped automatically), so write them literally — `Q&A`, not `Q&amp;A`. Descriptions don't currently render inline Markdown such as links; keep them to a single plain sentence.

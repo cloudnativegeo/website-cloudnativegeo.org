@@ -27,6 +27,11 @@
     <p>{{ .Params.description | markdownify }}</p>
   {{- .Content -}}
 
+  {{ with .Params.agenda }}
+    <h2 id="agenda">Agenda</h2>
+    {{ partial "agenda.html" . }}
+  {{ end }}
+
   {{if isset .Params "zoom_registration_url"}}
     <iframe width="100%" height="500px" frameborder="no" scrolling="no" seamless src="{{ .Page.Params.zoom_registration_url }}"></iframe>
   {{ end }}

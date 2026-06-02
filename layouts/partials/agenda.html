@@ -1,0 +1,44 @@
+{{/*
+  Event agenda table.
+
+  Pass the agenda data as the context, e.g. from an event page:
+    {{ partial "agenda.html" .Params.agenda }}
+
+  Schema — a list of blocks, each with an optional section heading and a
+  list of items:
+
+    agenda:
+      - section: "Morning session"        # optional block heading (eyebrow)
+        note: "15-minute talks + 5 min Q&A" # optional sub-note next to it
+        items:
+          - time: "09:15"                 # optional; omit to leave blank
+            title: "Talk title"           # required
+            description: "One-line summary."  # optional (plain text)
+            speakers:                      # omit entirely for a break row
+              - name: "Speaker Name"
+                affiliation: "Org"         # optional
+              - name: "Second panelist"    # multiple => panel
+                affiliation: "Org"
+
+  An item with no `speakers` renders as a muted break row (Lunch, Coffee,
+  Reception). Styling lives in assets/css/main.css under the `.agenda` rules.
+*/ -}}
+{{- with . -}}
+<table class="agenda">
+<tbody>
+{{- range . }}
+{{- $block := . }}
+{{- with .section }}
+<tr class="ag-section"><td colspan="3"><span class="label">{{ . }}</span>{{ with $block.note }}<span class="note">{{ . }}</span>{{ end }}</td></tr>
+{{- end }}
+{{- range $block.items }}
+{{- if .speakers }}
+<tr><td class="ag-time">{{ .time }}</td><td><span class="ag-title">{{ .title }}</span>{{ with .description }}<span class="ag-desc">{{ . }}</span>{{ end }}</td><td class="ag-speaker">{{ range .speakers }}<span class="panelist"><span class="name">{{ .name }}</span>{{ with .affiliation }}<span class="affil">{{ . }}</span>{{ end }}</span>{{ end }}</td></tr>
+{{- else }}
+<tr class="ag-break"><td class="ag-time">{{ .time }}</td><td class="ag-talk-cell" colspan="2"><span class="ag-title">{{ .title }}</span>{{ with .description }}<span class="ag-desc">{{ . }}</span>{{ end }}</td></tr>
+{{- end }}
+{{- end }}
+{{- end }}
+</tbody>
+</table>
+{{- end -}}
