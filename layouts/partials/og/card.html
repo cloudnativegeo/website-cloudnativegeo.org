@@ -1,0 +1,162 @@
+{{- /*
+  og/card.html — build a dynamic Open Graph card (1200×630) for a page and return
+  the rendered PNG resource. Reproduces the approved "Masthead" design entirely in
+  the Hugo build (no headless browser): the static chrome is the committed
+  assets/og/base.png; this partial overlays the dynamic text with images.Text.
+
+  The headline auto-fit mirrors card.html's fitHeadline(): greedy word-wrap +
+  largest font size (26–86px) that fits the headline box in width AND height,
+  measured with the per-glyph advances in data/og_metrics.json.
+
+  Call with the page as context. Returns the og.png resource, or nothing if the
+  page opts out (explicit front-matter images take precedence in opengraph.html).
+
+  Geometry constants below mirror design_handoff_og_cards/card.html and were
+  calibrated against rendered output; change them together with the design.
+*/ -}}
+
+{{- $page := . -}}
+{{- $m := site.Data.og_metrics -}}
+
+{{- /* ---- content model: title + url + footer slots, by section ---- */ -}}
+{{- $title := $page.Title -}}
+{{- $url := "cloudnativegeo.org" -}}
+{{- $left := "" -}}
+{{- $right := "" -}}
+{{- if eq $page.Section "blog" -}}
+  {{- $url = "cloudnativegeo.org/blog" -}}
+  {{- with $page.Params.author -}}{{- $left = . -}}{{- end -}}
+  {{- $right = $page.Date.Format "02 Jan 2006" -}}
+{{- else if eq $page.Section "events" -}}
+  {{- $url = "cloudnativegeo.org/events" -}}
+  {{- with $page.Params.where -}}{{- $left = . -}}{{- end -}}
+  {{- with $page.Params.display_date -}}{{- $right = . -}}{{- end -}}
+{{- end -}}
+
+{{- /* author front-matter can be markdown ([Name](url)); strip to plain text */ -}}
+{{- $left = $left | $page.RenderString | plainify | htmlUnescape | chomp -}}
+{{- $title = $title | plainify | htmlUnescape | chomp -}}
+
+{{- /* ---- geometry (px on the 1200×630 canvas) ---- */ -}}
+{{- $padX := 88 -}}
+{{- $usableW := 1024 -}}      {{- /* 1200 − 2·88 */ -}}
+{{- $rightEdge := 1112 -}}    {{- /* 1200 − 88 */ -}}
+{{- $hBoxTop := 156 -}}       {{- /* headline box: below the 112px bar + gap */ -}}
+{{- $hBoxH := 344 -}}         {{- /* headline box height (top 156 → 500) */ -}}
+{{- $pitch := 1.04 -}}        {{- /* line pitch as a multiple of font size */ -}}
+{{- $minSize := 26 -}}
+{{- $maxSize := 86 -}}
+{{- $ink := "#2F343B" -}}
+{{- $soft := "#F2F4F6" -}}
+
+{{- /* iA Writer Quattro is OFL-licensed and committed in-repo. Berkeley Mono is
+       licensed and must NOT live in this public repo, so it's fetched from the
+       private CDN at build time — with a local fallback so `assets/fonts/
+       BerkeleyMono-*.ttf` (gitignored) is used during local dev when present. */ -}}
+{{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
+{{- $monoBold := partial "og/mono.html" "Bold" -}}
+{{- $monoReg := partial "og/mono.html" "Regular" -}}
+{{- $base := resources.Get "og/base.png" -}}
+
+{{- /* ---- precompute per-word advances (em units, size-independent) ---- */ -}}
+{{- $adv := $m.quattro.adv -}}
+{{- $def := $m.quattro.default -}}
+{{- $space := $m.quattro.space -}}
+{{- $ch := $m.quattro.ch -}}
+{{- $words := slice -}}
+{{- range $w := split $title " " -}}
+  {{- if ne $w "" -}}
+    {{- $s := 0.0 -}}
+    {{- range $c := split $w "" -}}
+      {{- $s = add $s (index $adv $c | default $def) -}}
+    {{- end -}}
+    {{- $words = $words | append (dict "w" $w "adv" $s) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* ---- fit: largest size whose greedy wrap fits width AND height ---- */ -}}
+{{- $best := $minSize -}}
+{{- $bestLines := slice $title -}}
+{{- $found := false -}}
+{{- range $size := seq $maxSize -1 $minSize -}}
+  {{- if not $found -}}
+    {{- $usable := math.Min $usableW (mul (mul $ch $size) 17) -}}
+    {{- $lines := slice -}}
+    {{- $cur := "" -}}
+    {{- $curEm := 0.0 -}}
+    {{- $fits := true -}}
+    {{- range $wa := $words -}}
+      {{- if gt (mul $wa.adv $size) $usable -}}{{- $fits = false -}}{{- end -}}
+      {{- $tent := $wa.adv -}}
+      {{- if ne $cur "" -}}{{- $tent = add (add $curEm $space) $wa.adv -}}{{- end -}}
+      {{- if le (mul $tent $size) $usable -}}
+        {{- $cur = cond (eq $cur "") $wa.w (printf "%s %s" $cur $wa.w) -}}
+        {{- $curEm = $tent -}}
+      {{- else -}}
+        {{- $lines = $lines | append $cur -}}
+        {{- $cur = $wa.w -}}
+        {{- $curEm = $wa.adv -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if ne $cur "" -}}{{- $lines = $lines | append $cur -}}{{- end -}}
+    {{- $blockH := mul (mul (len $lines) $size) $pitch -}}
+    {{- if and $fits (le $blockH $hBoxH) -}}
+      {{- $best = $size -}}{{- $bestLines = $lines -}}{{- $found = true -}}
+    {{- else if eq $size $minSize -}}
+      {{- $bestLines = $lines -}}  {{- /* fallback wrap if nothing fits */ -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* ---- compose: overlay headline + URL + footer onto the base ---- */ -}}
+{{- $filters := slice -}}
+
+{{- /* URL — Berkeley Mono 24, Soft White, right-aligned in the blue bar */ -}}
+{{- with $monoReg -}}
+  {{- $urlW := mul (mul (len $url) $m.mono.adv) 24 -}}
+  {{- $filters = $filters | append (images.Text $url (dict
+        "color" $soft "size" 24 "font" .
+        "x" (int (sub $rightEdge $urlW)) "y" 44 )) -}}
+{{- end -}}
+
+{{- /* Headline — Quattro Bold, ink, left-aligned, vertically centered */ -}}
+{{- $linePitch := mul $best $pitch -}}
+{{- $blockH := mul (len $bestLines) $linePitch -}}
+{{- $blockTop := add $hBoxTop (div (sub $hBoxH $blockH) 2) -}}
+{{- range $i, $line := $bestLines -}}
+  {{- $y := int (add $blockTop (mul $i $linePitch)) -}}
+  {{- $filters = $filters | append (images.Text $line (dict
+        "color" $ink "size" $best "font" $quattro
+        "x" $padX "y" $y )) -}}
+{{- end -}}
+
+{{- /* Footer (both slots need Berkeley Mono Bold; skip entirely if unavailable) */ -}}
+{{- if $monoBold -}}
+{{- /* Footer right — Berkeley Mono Bold 28, ink, right-aligned */ -}}
+{{- $rightW := 0.0 -}}
+{{- with $right -}}
+  {{- $rightW = mul (mul (len .) $m.mono.adv) 28 -}}
+  {{- $filters = $filters | append (images.Text . (dict
+        "color" $ink "size" 28 "font" $monoBold
+        "x" (int (sub $rightEdge $rightW)) "y" 524 )) -}}
+{{- end -}}
+
+{{- /* Footer left — Berkeley Mono Bold 28, ink, left-aligned. Truncate with an
+       ellipsis so a long author list / venue never collides with the date. */ -}}
+{{- with $left -}}
+  {{- $charW := mul $m.mono.adv 28 -}}
+  {{- $gap := cond (gt $rightW 0.0) 28.0 0.0 -}}
+  {{- $avail := sub (sub (sub $rightEdge $padX) $rightW) $gap -}}
+  {{- $maxChars := int (math.Floor (div $avail $charW)) -}}
+  {{- $txt := . -}}
+  {{- if gt (len $txt) $maxChars -}}
+    {{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}
+  {{- end -}}
+  {{- $filters = $filters | append (images.Text $txt (dict
+        "color" $ink "size" 28 "font" $monoBold "x" $padX "y" 524 )) -}}
+{{- end -}}
+{{- end -}}
+
+{{- $img := $base.Filter $filters -}}
+{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $img -}}
+{{- return $img -}}

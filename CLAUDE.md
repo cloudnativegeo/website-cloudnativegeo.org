@@ -47,6 +47,10 @@ Blog post images live in `assets/images/` (not alongside the content files). The
 
 The `{{< img >}}` shortcode (in `layouts/shortcodes/img.html`) handles responsive srcsets for raster images and passes GIFs/SVGs through as-is.
 
+### Open Graph cards
+
+Every single page gets a generated 1200×630 OG card (the "Masthead" design) as its `og:image`, rendered entirely in the Hugo build — no headless browser or Node step. The renderer is `layouts/partials/og/card.html` (wired in via `opengraph.html`); it overlays the page's title/URL/footer onto the committed chrome `assets/og/base.png`, sizing the headline with the font metrics in `data/og_metrics.json`. Explicit front-matter `images:` still overrides. See `scripts/og/README.md` for the full pipeline and how to regenerate `base.png` / `og_metrics.json`.
+
 ### Front matter
 
 Blog posts use these front matter fields:

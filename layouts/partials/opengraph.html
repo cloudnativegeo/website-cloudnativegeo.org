@@ -3,23 +3,22 @@
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
 
+{{- /* og:image precedence:
+        1. explicit front-matter `images:` (author's choice wins)
+        2. dynamic "Masthead" OG card for any single page (layouts/partials/og/card.html)
+        3. home_og.jpg fallback for the home page and section/list pages */ -}}
 {{- with $.Params.images -}}
 {{- range first 6 . }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
 {{- else -}}
-{{- if eq .Section "blog" -}}
-  {{- /* For blog posts, use page resources or site default */}}
-  {{- $images := $.Resources.ByType "image" -}}
-  {{- $featured := $images.GetMatch "*feature*" -}}
-  {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
-  {{- with $featured -}}
-  <meta property="og:image" content="{{ $featured.Permalink }}"/>
+  {{- if .IsPage -}}
+    {{- with partial "og/card.html" . -}}
+  <meta property="og:image" content="{{ .Permalink }}" />
+  <meta property="og:image:width" content="{{ .Width }}" />
+  <meta property="og:image:height" content="{{ .Height }}" />
+    {{- end -}}
   {{- else -}}
-  {{- with $.Site.Params.images }}<meta property="og:image" content="{{ index . 0 | absURL }}"/>{{ end -}}
-  {{- end -}}
-{{- else -}}
-  {{- /* For non-blog pages, use home_og.jpg by default */}}
   <meta property="og:image" content="{{ "home_og.jpg" | absURL }}"/>
-{{- end -}}
+  {{- end -}}
 {{- end -}}
 
 {{- if .IsPage }}
@@ -47,24 +46,6 @@
   {{- end }}
 {{ end }}{{ end }}
 {{- end }}
-
-{{/* Generate opengraph image only if no specific image is defined in front matter and it's a blog post */}}
-{{- if and .IsPage (not .Params.images) (eq .Section "blog") -}}
-  {{ $base := resources.Get "og_base.png" }}
-  {{ $boldFont := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf"}}
-  {{ $img := $base.Filter (images.Text .Page.Title (dict
-    "color" "#FFFFFF"
-    "size" 80
-    "linespacing" 2
-    "x" 70
-    "y" 70
-    "font" $boldFont
-  ))}} 
-  {{ $img = resources.Copy (path.Join .Page.RelPermalink "img/og.png") $img }}
-  <meta property="og:image" content="{{$img.Permalink}}">
-  <meta property="og:image:width" content="{{$img.Width}}" />
-  <meta property="og:image:height" content="{{$img.Height}}" />
-{{- end -}}
 
 {{/* Twitter card type - Twitter will use og: tags for title, description, and image */}}
 <meta name="twitter:card" content="summary_large_image" />

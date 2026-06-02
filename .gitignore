@@ -3,3 +3,5 @@
 **/.DS_Store
 .hugo_build.lock
 **/settings.local.json
+# Berkeley Mono is licensed/non-redistributable — must not live in this public repo
+assets/fonts/BerkeleyMono-*.ttf
