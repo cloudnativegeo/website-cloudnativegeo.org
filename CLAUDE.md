@@ -47,6 +47,10 @@ Blog post images live in `assets/images/` (not alongside the content files). The
 
 The `{{< img >}}` shortcode (in `layouts/shortcodes/img.html`) handles responsive srcsets for raster images and passes GIFs/SVGs through as-is.
 
+### Open Graph cards
+
+Every page gets a generated 1200×630 OG card as its `og:image`, rendered entirely in the Hugo build — no headless browser or Node step. Three styles, by page type: **Masthead** (blog posts — soft-white ground, `BLOG POST` eyebrow + ink headline, blue bar + URL, rule above an author/date footer), **Event** (single event pages — blue with a soft-white masthead + URL, `EVENT` eyebrow in Sunshine Yellow, the same footer grammar with location (left) and date+time (right), optional duotone photo ground), and **Brand** (home, the `/blog` + `/events` landings, and all generic pages like /about, /join — full-bleed blue, no bar, larger wordmark, white title + tagline, URL bottom-right). The dispatcher is `layouts/partials/og/card.html` (wired in via `opengraph.html`), delegating to `card-blog.html` / `card-event.html` / `card-brand.html` with shared `headline.html` (eyebrow + auto-fit headline) and `fit.html` helpers; text is overlaid onto the committed `assets/og/base*.png` chrome, sized via the font metrics in `data/og_metrics.json`. A blog/generic page can override with front-matter `images:`; for events `images:` is the in-page hero and flagship events set `og_card_photo:` (+ `og_card_treatment: duotone`) for a build-time duotone ground. See `scripts/og/README.md` for the full pipeline.
+
 ### Front matter
 
 Blog posts use these front matter fields:

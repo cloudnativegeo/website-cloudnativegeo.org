@@ -1,0 +1,23 @@
+{{- /*
+  og/mono.html — return a Berkeley Mono TTF resource for the OG card renderer
+  (or nil if unavailable). Context is the weight: "Bold" or "Regular".
+
+  Berkeley Mono is licensed and must not be committed to this public repo, so it
+  is served from the private CDN (assets.radiant.earth) and fetched at build time
+  (images.Text needs a TTF; the site's runtime CSS uses the woff2 from the same
+  CDN). A local fallback at assets/fonts/BerkeleyMono-<weight>.ttf (gitignored) is
+  used during local development when present, so dev builds need no network.
+*/ -}}
+{{- $weight := . -}}
+{{- $res := resources.Get (printf "/fonts/BerkeleyMono-%s.ttf" $weight) -}}
+{{- if not $res -}}
+  {{- $url := printf "https://assets.radiant.earth/fonts/BerkeleyMono-%s.ttf" $weight -}}
+  {{- /* Hugo ≥0.141 replaced Resource.Err with the `try` keyword */ -}}
+  {{- $r := try (resources.GetRemote $url) -}}
+  {{- with $r.Err -}}
+    {{- warnf "OG card: Berkeley Mono %s fetch failed (%s) — footer/URL will be omitted" $weight . -}}
+  {{- else -}}
+    {{- $res = $r.Value -}}
+  {{- end -}}
+{{- end -}}
+{{- return $res -}}

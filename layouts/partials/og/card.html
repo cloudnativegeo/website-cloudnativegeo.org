@@ -1,0 +1,21 @@
+{{- /*
+  og/card.html — dispatch a page to the right Open Graph card renderer and return
+  the rendered 1200×630 og.png resource. Called from opengraph.html.
+
+    single event page            → og/card-event.html
+    blog post                    → og/card-blog.html
+    home / lists / generic pages → og/card-brand.html
+
+  All three overlay text onto a committed assets/og/base*.png with images.Text,
+  sizing the headline via the shared og/fit.html + og/headline.html helpers.
+*/ -}}
+{{- $page := . -}}
+{{- $img := "" -}}
+{{- if and $page.IsPage (eq $page.Section "events") -}}
+  {{- $img = partial "og/card-event.html" $page -}}
+{{- else if and $page.IsPage (eq $page.Section "blog") -}}
+  {{- $img = partial "og/card-blog.html" $page -}}
+{{- else -}}
+  {{- $img = partial "og/card-brand.html" $page -}}
+{{- end -}}
+{{- return $img -}}

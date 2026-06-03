@@ -1,0 +1,33 @@
+{{- /*
+  og/headline.html — draw an optional eyebrow + the auto-fit headline, centered
+  together as a group within a box, and RETURN the slice of images.Text filters.
+  Shared by the blog (Masthead) and event cards.
+
+  Input (dict):
+    title, m              — headline text + site.Data.og_metrics
+    font, color           — headline face + color
+    eyebrow, eyeColor     — eyebrow label + color
+    eyeFont               — eyebrow face; nil (or empty eyebrow) omits the eyebrow
+    padX                  — left edge
+    usableW, boxTop, boxH — fit width + the box the group is centered in
+    min, max, pitch       — headline auto-fit bounds + line pitch
+    eyeSize, eyeGap       — eyebrow size + gap below it
+*/ -}}
+{{- $fit := partial "og/fit.html" (dict "title" .title "m" .m "usableW" .usableW
+      "boxH" .boxH "min" .min "max" .max "pitch" .pitch) -}}
+{{- $lp := mul $fit.size .pitch -}}
+{{- $hasEye := and .eyeFont (ne .eyebrow "") -}}
+{{- $eyeAdv := cond $hasEye (add .eyeSize .eyeGap) 0.0 -}}
+{{- $groupTop := add .boxTop (div (sub .boxH (add $eyeAdv (mul (len $fit.lines) $lp))) 2) -}}
+{{- $f := slice -}}
+{{- if $hasEye -}}
+  {{- $f = $f | append (images.Text .eyebrow (dict
+        "color" .eyeColor "size" .eyeSize "font" .eyeFont "x" .padX "y" (int $groupTop) )) -}}
+{{- end -}}
+{{- $blockTop := add $groupTop $eyeAdv -}}
+{{- range $i, $line := $fit.lines -}}
+  {{- $f = $f | append (images.Text $line (dict
+        "color" $.color "size" $fit.size "font" $.font
+        "x" $.padX "y" (int (add $blockTop (mul $i $lp))) )) -}}
+{{- end -}}
+{{- return $f -}}

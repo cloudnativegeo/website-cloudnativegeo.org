@@ -3,23 +3,23 @@
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
 
-{{- with $.Params.images -}}
-{{- range first 6 . }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
-{{- else -}}
-{{- if eq .Section "blog" -}}
-  {{- /* For blog posts, use page resources or site default */}}
-  {{- $images := $.Resources.ByType "image" -}}
-  {{- $featured := $images.GetMatch "*feature*" -}}
-  {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
-  {{- with $featured -}}
-  <meta property="og:image" content="{{ $featured.Permalink }}"/>
-  {{- else -}}
-  {{- with $.Site.Params.images }}<meta property="og:image" content="{{ index . 0 | absURL }}"/>{{ end -}}
+{{- /* og:image: every CNG page gets a dynamic card by default —
+        events → event card · blog posts → Masthead · home/lists/pages → brand card.
+        Override: a blog or generic single page may pin its own social image with
+        front-matter `images:`. Events keep their card (images: is the in-page
+        hero); home + list pages keep the brand card. */ -}}
+{{- $useCard := true -}}
+{{- if and .IsPage (ne .Section "events") .Params.images -}}
+  {{- $useCard = false -}}
+{{- end -}}
+{{- if $useCard -}}
+  {{- with partial "og/card.html" . -}}
+  <meta property="og:image" content="{{ .Permalink }}" />
+  <meta property="og:image:width" content="{{ .Width }}" />
+  <meta property="og:image:height" content="{{ .Height }}" />
   {{- end -}}
 {{- else -}}
-  {{- /* For non-blog pages, use home_og.jpg by default */}}
-  <meta property="og:image" content="{{ "home_og.jpg" | absURL }}"/>
-{{- end -}}
+  {{- range first 6 .Params.images }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
 {{- end -}}
 
 {{- if .IsPage }}
@@ -47,24 +47,6 @@
   {{- end }}
 {{ end }}{{ end }}
 {{- end }}
-
-{{/* Generate opengraph image only if no specific image is defined in front matter and it's a blog post */}}
-{{- if and .IsPage (not .Params.images) (eq .Section "blog") -}}
-  {{ $base := resources.Get "og_base.png" }}
-  {{ $boldFont := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf"}}
-  {{ $img := $base.Filter (images.Text .Page.Title (dict
-    "color" "#FFFFFF"
-    "size" 80
-    "linespacing" 2
-    "x" 70
-    "y" 70
-    "font" $boldFont
-  ))}} 
-  {{ $img = resources.Copy (path.Join .Page.RelPermalink "img/og.png") $img }}
-  <meta property="og:image" content="{{$img.Permalink}}">
-  <meta property="og:image:width" content="{{$img.Width}}" />
-  <meta property="og:image:height" content="{{$img.Height}}" />
-{{- end -}}
 
 {{/* Twitter card type - Twitter will use og: tags for title, description, and image */}}
 <meta name="twitter:card" content="summary_large_image" />
