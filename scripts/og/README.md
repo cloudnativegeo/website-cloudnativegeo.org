@@ -49,7 +49,7 @@ Content mapping:
 | headline | `.Title` (ink) | `.Title` (white) | `.Title` (white, " - CNG" stripped) |
 | under headline | — | — | site tagline |
 | footer left | `author` | location (`where` before ` - `) | — |
-| footer right | date (`02 Jan 2006`) | `display_date`, with `when_time` tucked under it | the page URL |
+| footer right | date (`02 January 2006`) | `display_date`, with `when_time` tucked under it | the page URL |
 
 Blog and event share one footer grammar: a thin rule (dark on the light ground,
 faint white on blue) above a left/right metadata row. Footer slots auto-hide when

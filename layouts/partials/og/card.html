@@ -36,7 +36,7 @@
 {{- if eq $page.Section "blog" -}}
   {{- $url = "cloudnativegeo.org/blog" -}}
   {{- with $page.Params.author -}}{{- $left = . -}}{{- end -}}
-  {{- $right = $page.Date.Format "02 Jan 2006" -}}
+  {{- $right = $page.Date.Format "02 January 2006" -}}
 {{- end -}}
 
 {{- /* author front-matter can be markdown ([Name](url)); strip to plain text */ -}}
