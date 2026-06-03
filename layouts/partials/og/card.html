@@ -101,7 +101,7 @@
   {{- $rightW = mul (mul (len .) $m.mono.adv) 28 -}}
   {{- $filters = $filters | append (images.Text . (dict
         "color" $ink "size" 28 "font" $monoBold
-        "x" (int (sub $rightEdge $rightW)) "y" 524 )) -}}
+        "x" (int (sub $rightEdge $rightW)) "y" 518 )) -}}
 {{- end -}}
 
 {{- /* Footer left — Berkeley Mono Bold 28, ink, left-aligned. Truncate with an
@@ -116,7 +116,7 @@
     {{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}
   {{- end -}}
   {{- $filters = $filters | append (images.Text $txt (dict
-        "color" $ink "size" 28 "font" $monoBold "x" $padX "y" 524 )) -}}
+        "color" $ink "size" 28 "font" $monoBold "x" $padX "y" 518 )) -}}
 {{- end -}}
 {{- end -}}
 

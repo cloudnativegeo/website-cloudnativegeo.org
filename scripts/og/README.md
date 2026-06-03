@@ -4,12 +4,13 @@ Every page on cloudnativegeo.org gets a generated 1200×630 Open Graph card — 
 `og:image` for that page. There are three styles, picked by page type:
 
 - **Blog posts → Masthead**: Soft White ground, Bonus Blue top bar + white CNG
-  wordmark, auto-fit iA Writer Quattro headline in ink, Berkeley Mono footer
-  (author · date).
+  wordmark + the URL, auto-fit iA Writer Quattro headline in ink, and a footer
+  over a thin rule: author (left), date (right).
 - **Single event pages → Event**: the photo-negative — Bonus Blue ground, Soft
-  White bar with a blue wordmark + blue uppercase date, white headline, the site
-  tagline beneath it, a white footer carrying `venue · time` (left) and the events
-  URL (right), over a faint rule. Flagship events can use a duotone photo ground.
+  White bar with a blue wordmark + the events URL, a centered white headline, and a
+  footer over a thin rule with the same grammar as the blog card: location (left),
+  date with the time tucked under it (right). Flagship events can use a duotone
+  photo ground.
 - **Home, section landings (/blog, /events), and all generic pages → Brand**:
   full-bleed Bonus Blue, **no bar** — a larger white wordmark sits directly on the
   blue, with the white title + tagline centered, a faint rule, and the page URL
@@ -43,14 +44,15 @@ Content mapping:
 
 | Slot | Blog (Masthead) | Single event | Brand (home/lists/pages) |
 |---|---|---|---|
-| top-bar right | the URL | the **date** (`display_date`, uppercased) | — (no bar) |
+| top-bar right | the URL | the events URL | — (no bar) |
 | headline | `.Title` (ink) | `.Title` (white) | `.Title` (white, " - CNG" stripped) |
-| under headline | — | site tagline, dropped if the headline is long | site tagline |
-| footer left | `author` | `venue · time` (`where` before ` - `, then `when_time`) | — |
-| footer right | date (`02 Jan 2006`) | events URL | the page URL |
+| under headline | — | — | site tagline |
+| footer left | `author` | location (`where` before ` - `) | — |
+| footer right | date (`02 Jan 2006`) | `display_date`, with `when_time` tucked under it | the page URL |
 
-Footer slots auto-hide when empty; the long event slot truncates with an ellipsis
-so it never collides with the other.
+Blog and event share one footer grammar: a thin rule (dark on the light ground,
+faint white on blue) above a left/right metadata row. Footer slots auto-hide when
+empty; the long slot truncates with an ellipsis so it never collides with the other.
 
 ### Flagship event backgrounds (duotone photo)
 

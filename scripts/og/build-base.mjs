@@ -47,21 +47,25 @@ const wordmark = (fill) =>
 const wordmarkAt = (fill, h, y) =>
   `<g transform="translate(${PAD_X}, ${y}) scale(${h / LOGO_VB_H})"><path d="${WORDMARK_D}" fill="${fill}"/></g>`;
 
-// Masthead base (blog/pages): Soft White ground, Bonus Blue bar, white wordmark.
+// The thin metadata rule at y=500, in two tones: dark for the light Masthead
+// ground, light for the blue event/brand grounds. Same position on every card.
+const RULE_DARK = `<line x1="${PAD_X}" y1="500" x2="${RIGHT_EDGE}" y2="500" stroke="#2F343B" stroke-opacity="0.16" stroke-width="2"/>`;
+const RULE_LIGHT = `<line x1="${PAD_X}" y1="500" x2="${RIGHT_EDGE}" y2="500" stroke="${SOFT_WHITE}" stroke-opacity="0.28" stroke-width="2"/>`;
+
+// Masthead base (blog): Soft White ground, Bonus Blue bar, white wordmark, dark rule.
 const baseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect x="0" y="0" width="1200" height="630" fill="${SOFT_WHITE}"/>
   <rect x="0" y="0" width="1200" height="${BAR_H}" fill="${BONUS_BLUE}"/>
   ${wordmark(SOFT_WHITE)}
+  ${RULE_DARK}
 </svg>`;
 
-// Event base (inverted): Bonus Blue ground, Soft White bar, blue wordmark, and a
-// faint white footer rule (the tagline must clear it; see card-event.html).
-const RULE = `<line x1="${PAD_X}" y1="500" x2="${RIGHT_EDGE}" y2="500" stroke="${SOFT_WHITE}" stroke-opacity="0.28" stroke-width="2"/>`;
+// Event base (inverted): Bonus Blue ground, Soft White bar, blue wordmark, light rule.
 const eventSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect x="0" y="0" width="1200" height="630" fill="${BONUS_BLUE}"/>
   <rect x="0" y="0" width="1200" height="${BAR_H}" fill="${SOFT_WHITE}"/>
   ${wordmark(BONUS_BLUE)}
-  ${RULE}
+  ${RULE_LIGHT}
 </svg>`;
 
 // Event chrome overlay (transparent): the same bar + wordmark + rule PLUS dark-blue
@@ -84,7 +88,7 @@ const eventChromeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" hei
   <rect x="0" y="350" width="1200" height="280" fill="url(#b)"/>
   <rect x="0" y="0" width="1200" height="${BAR_H}" fill="${SOFT_WHITE}"/>
   ${wordmark(BONUS_BLUE)}
-  ${RULE}
+  ${RULE_LIGHT}
 </svg>`;
 
 // Brand / landing base (home, /about, /join, section landings): full-bleed Bonus
@@ -94,7 +98,7 @@ const BRAND_LOGO_H = 76;   // larger than the bar logo; sits lower for crop safe
 const brandSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect x="0" y="0" width="1200" height="630" fill="${BONUS_BLUE}"/>
   ${wordmarkAt(SOFT_WHITE, BRAND_LOGO_H, 80)}
-  ${RULE}
+  ${RULE_LIGHT}
 </svg>`;
 
 fs.mkdirSync(OG, { recursive: true });
