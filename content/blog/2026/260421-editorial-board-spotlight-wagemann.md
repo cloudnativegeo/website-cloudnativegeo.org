@@ -3,8 +3,6 @@ date: 2026-04-21T01:00:38-04:00
 title: "CNG Editorial Board Spotlight – Q&A: Julia Wagemann"
 tags: [ ""
 ]
-images:
-  -  img/editorial-board/julia-wagemann.png
 summary: "Editorial Board Spotlight series features a different board member sharing their perspectives on geospatial trends and tools, what’s capturing their attention through reading or their current work, and the challenges they believe our community should focus on."
 ---
 

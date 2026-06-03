@@ -3,8 +3,6 @@ date: 2025-10-05T01:00:38-04:00
 title: "CNG Editorial Board Spotlight – Q&A: Stephanie May"
 tags: [ ""
 ]
-images:
-  - /img/editorial-board/stephanie-may.jpg
 summary: "Editorial Board Spotlight series features a different board member sharing their perspectives on geospatial trends and tools, what’s capturing their attention through reading or their current work, and the challenges they believe our community should focus on."
 ---
 

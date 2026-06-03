@@ -3,8 +3,6 @@ date: 2025-08-05T01:00:38-04:00
 title: "CNG Editorial Board Spotlight – Q&A: Qiusheng Wu"
 tags: [ ""
 ]
-images:
-  -  images/qiusheng-wu.jpg
 summary: "Editorial Board Spotlight series features a different board member sharing their perspectives on geospatial trends and tools, what’s capturing their attention through reading or their current work, and the challenges they believe our community should focus on."
 ---
 

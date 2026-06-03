@@ -3,8 +3,6 @@ date: "2024-12-11T1:00:01-04:00"
 title: "Interview with Kyle Barron on GeoArrow and GeoParquet, and the Future of Geospatial Data Analysis"
 tags: [ ""
 ]
-images:
-  - /images/20241209-kylebarron.png
 summary: "Kyle Barron, Cloud Engineer at Development Seed, builds open source tools and infrastructure that process and visualize geospatial data."
 ---
 {{< img src="images/20241209-kylebarron.png" alt="Kyle Barron" caption="Kyle Barron, Cloud Engineer at Development Seed." >}}
