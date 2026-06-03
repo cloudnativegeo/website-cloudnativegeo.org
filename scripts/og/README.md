@@ -43,13 +43,26 @@ Content mapping:
 Footer slots auto-hide when empty; the long slot truncates with an ellipsis so it
 never collides with the other.
 
-### Flagship event backgrounds
+### Flagship event backgrounds (duotone photo)
 
-An event may set front-matter `og_card_base: <file>` (a PNG under `assets/og/`) to
-swap the flat blue ground for a baked **Bonus-Blue duotone** background — same bar,
-wordmark, headline, and footer positions, just a photographic ground. The duotone
-PNG must be pre-baked (1200×630, with the legibility gradients and chrome already
-composited); the renderer only draws flat text on top.
+A flagship event can swap the flat blue ground for a **Bonus-Blue duotone of a
+photo**, converted at build time — no pre-baked asset. In the event's front matter:
+
+```yaml
+og_card_photo: images/250603-cng-conf-open.jpg   # path under assets/
+og_card_treatment: duotone                        # optional; duotone is the default/only treatment
+```
+
+`card-event.html` crops the photo to 1200×630 (`.Fill … Smart`), desaturates it
+(`images.Grayscale`), recolors it blue (`images.Colorize`), then composites the
+transparent `assets/og/base-event-chrome.png` overlay on top — that overlay carries
+the opaque Soft White bar, the blue wordmark, the footer rule, and the dark-blue
+left/bottom legibility gradients that keep the white headline and footer readable.
+Text is then drawn exactly as on the flat card, so the layout never moves.
+
+`og_card_photo` is independent of `images:` (which remains the in-page hero in
+`events/single.html`); setting it makes the duotone card the event's `og:image`.
+Tune the duotone with the `images.Colorize HUE SAT PERCENT` args in card-event.html.
 
 ## Regenerating the committed artifacts
 

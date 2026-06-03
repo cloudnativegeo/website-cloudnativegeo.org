@@ -4,18 +4,28 @@
 <meta property="og:url" content="{{ .Permalink }}" />
 
 {{- /* og:image precedence:
-        1. explicit front-matter `images:` (author's choice wins)
-        2. dynamic "Masthead" OG card for any single page (layouts/partials/og/card.html)
-        3. home_og.jpg fallback for the home page and section/list pages */ -}}
-{{- with $.Params.images -}}
-{{- range first 6 . }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
-{{- else -}}
-  {{- if .IsPage -}}
-    {{- with partial "og/card.html" . -}}
+        - Events: always the dynamic event card (the brand pattern). `images:` is
+          the in-page hero, not the social image; a flagship `og_card_photo`
+          becomes the card's duotone ground.
+        - Other single pages: explicit `images:` wins, else the Masthead card.
+        - Home / list pages: the home_og.jpg fallback. */ -}}
+{{- $useCard := false -}}
+{{- if .IsPage -}}
+  {{- if eq .Section "events" -}}
+    {{- $useCard = or .Params.og_card_photo (not .Params.images) -}}
+  {{- else -}}
+    {{- $useCard = not .Params.images -}}
+  {{- end -}}
+{{- end -}}
+{{- if $useCard -}}
+  {{- with partial "og/card.html" . -}}
   <meta property="og:image" content="{{ .Permalink }}" />
   <meta property="og:image:width" content="{{ .Width }}" />
   <meta property="og:image:height" content="{{ .Height }}" />
-    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- with $.Params.images -}}
+  {{- range first 6 . }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
   {{- else -}}
   <meta property="og:image" content="{{ "home_og.jpg" | absURL }}"/>
   {{- end -}}

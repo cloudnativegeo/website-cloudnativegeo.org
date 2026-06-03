@@ -7,7 +7,8 @@
 
   Static chrome (blue ground, white bar, blue wordmark, footer rule) is the
   committed assets/og/base-event.png. Flagship events may set front-matter
-  `og_card_base: <file-under-assets/og/>` to swap in a baked duotone background.
+  `og_card_photo: <image-under-assets/>` to use a build-time Bonus-Blue duotone of
+  that photo as the ground instead (see the background block below).
 
   Called with the page as context; returns the og.png resource.
 */ -}}
@@ -52,9 +53,24 @@
 {{- $monoBold := partial "og/mono.html" "Bold" -}}
 {{- $monoReg := partial "og/mono.html" "Regular" -}}
 
-{{- $baseName := "og/base-event.png" -}}
-{{- with $page.Params.og_card_base -}}{{- $baseName = printf "og/%s" . -}}{{- end -}}
-{{- $base := resources.Get $baseName | default (resources.Get "og/base-event.png") -}}
+{{- /* Background: flat Bonus Blue by default, or a build-time Bonus-Blue duotone
+       of a front-matter photo for flagship events:
+         og_card_photo: images/250603-cng-conf-open.jpg
+         og_card_treatment: duotone   # optional; duotone is the only treatment
+       The photo is cropped to 1200×630, desaturated, recolored blue, then the
+       chrome+legibility-gradient overlay is composited on top. */ -}}
+{{- $base := resources.Get "og/base-event.png" -}}
+{{- with $page.Params.og_card_photo -}}
+  {{- $treatment := $page.Params.og_card_treatment | default "duotone" -}}
+  {{- with resources.Get . -}}
+    {{- if eq $treatment "duotone" -}}
+      {{- $ground := (.Fill "1200x630 Smart").Filter images.Grayscale (images.Colorize 239 78 64) -}}
+      {{- $base = $ground.Filter (images.Overlay (resources.Get "og/base-event-chrome.png") 0 0) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- warnf "OG event card: og_card_photo %q not found for %s" . $page.RelPermalink -}}
+  {{- end -}}
+{{- end -}}
 
 {{- $filters := slice -}}
 

@@ -53,15 +53,43 @@ const baseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="63
 
 // Event base (inverted): Bonus Blue ground, Soft White bar, blue wordmark, and a
 // faint white footer rule (the tagline must clear it; see card-event.html).
+const RULE = `<line x1="${PAD_X}" y1="500" x2="${RIGHT_EDGE}" y2="500" stroke="${SOFT_WHITE}" stroke-opacity="0.28" stroke-width="2"/>`;
 const eventSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect x="0" y="0" width="1200" height="630" fill="${BONUS_BLUE}"/>
   <rect x="0" y="0" width="1200" height="${BAR_H}" fill="${SOFT_WHITE}"/>
   ${wordmark(BONUS_BLUE)}
-  <line x1="${PAD_X}" y1="500" x2="${RIGHT_EDGE}" y2="500" stroke="${SOFT_WHITE}" stroke-opacity="0.28" stroke-width="2"/>
+  ${RULE}
+</svg>`;
+
+// Event chrome overlay (transparent): the same bar + wordmark + rule PLUS dark-blue
+// legibility gradients (left, for the headline; bottom, for the footer). This is
+// composited ON TOP of a duotoned photo for flagship events (see card-event.html),
+// so the photo never shows through the bar and white text stays legible.
+const DEEP_BLUE = "#0B0E66";
+const eventChromeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="l" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="${DEEP_BLUE}" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="${DEEP_BLUE}" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="b" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="${DEEP_BLUE}" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="${DEEP_BLUE}" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="${BAR_H}" width="780" height="${630 - BAR_H}" fill="url(#l)"/>
+  <rect x="0" y="350" width="1200" height="280" fill="url(#b)"/>
+  <rect x="0" y="0" width="1200" height="${BAR_H}" fill="${SOFT_WHITE}"/>
+  ${wordmark(BONUS_BLUE)}
+  ${RULE}
 </svg>`;
 
 fs.mkdirSync(OG, { recursive: true });
-for (const [name, svg] of [["base.png", baseSvg], ["base-event.png", eventSvg]]) {
+for (const [name, svg] of [
+  ["base.png", baseSvg],
+  ["base-event.png", eventSvg],
+  ["base-event-chrome.png", eventChromeSvg],
+]) {
   const png = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
   fs.writeFileSync(path.join(OG, name), png);
   console.log(`wrote ${path.join(OG, name)}`);
