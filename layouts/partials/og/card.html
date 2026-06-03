@@ -18,6 +18,14 @@
 {{- $page := . -}}
 {{- $m := site.Data.og_metrics -}}
 
+{{- /* Events get the inverted "event" card (blue ground, white headline,
+       where·when footer); everything else gets the "Masthead" card below.
+       Single return at the end (Hugo dislikes a second, conditional return). */ -}}
+{{- $img := "" -}}
+{{- if eq $page.Section "events" -}}
+{{- $img = partial "og/card-event.html" $page -}}
+{{- else -}}
+
 {{- /* ---- content model: title + url + footer slots, by section ---- */ -}}
 {{- $title := $page.Title -}}
 {{- $url := "cloudnativegeo.org" -}}
@@ -27,10 +35,6 @@
   {{- $url = "cloudnativegeo.org/blog" -}}
   {{- with $page.Params.author -}}{{- $left = . -}}{{- end -}}
   {{- $right = $page.Date.Format "02 Jan 2006" -}}
-{{- else if eq $page.Section "events" -}}
-  {{- $url = "cloudnativegeo.org/events" -}}
-  {{- with $page.Params.where -}}{{- $left = . -}}{{- end -}}
-  {{- with $page.Params.display_date -}}{{- $right = . -}}{{- end -}}
 {{- end -}}
 
 {{- /* author front-matter can be markdown ([Name](url)); strip to plain text */ -}}
@@ -58,55 +62,12 @@
 {{- $monoReg := partial "og/mono.html" "Regular" -}}
 {{- $base := resources.Get "og/base.png" -}}
 
-{{- /* ---- precompute per-word advances (em units, size-independent) ---- */ -}}
-{{- $adv := $m.quattro.adv -}}
-{{- $def := $m.quattro.default -}}
-{{- $space := $m.quattro.space -}}
-{{- $ch := $m.quattro.ch -}}
-{{- $words := slice -}}
-{{- range $w := split $title " " -}}
-  {{- if ne $w "" -}}
-    {{- $s := 0.0 -}}
-    {{- range $c := split $w "" -}}
-      {{- $s = add $s (index $adv $c | default $def) -}}
-    {{- end -}}
-    {{- $words = $words | append (dict "w" $w "adv" $s) -}}
-  {{- end -}}
-{{- end -}}
-
-{{- /* ---- fit: largest size whose greedy wrap fits width AND height ---- */ -}}
-{{- $best := $minSize -}}
-{{- $bestLines := slice $title -}}
-{{- $found := false -}}
-{{- range $size := seq $maxSize -1 $minSize -}}
-  {{- if not $found -}}
-    {{- $usable := math.Min $usableW (mul (mul $ch $size) 17) -}}
-    {{- $lines := slice -}}
-    {{- $cur := "" -}}
-    {{- $curEm := 0.0 -}}
-    {{- $fits := true -}}
-    {{- range $wa := $words -}}
-      {{- if gt (mul $wa.adv $size) $usable -}}{{- $fits = false -}}{{- end -}}
-      {{- $tent := $wa.adv -}}
-      {{- if ne $cur "" -}}{{- $tent = add (add $curEm $space) $wa.adv -}}{{- end -}}
-      {{- if le (mul $tent $size) $usable -}}
-        {{- $cur = cond (eq $cur "") $wa.w (printf "%s %s" $cur $wa.w) -}}
-        {{- $curEm = $tent -}}
-      {{- else -}}
-        {{- $lines = $lines | append $cur -}}
-        {{- $cur = $wa.w -}}
-        {{- $curEm = $wa.adv -}}
-      {{- end -}}
-    {{- end -}}
-    {{- if ne $cur "" -}}{{- $lines = $lines | append $cur -}}{{- end -}}
-    {{- $blockH := mul (mul (len $lines) $size) $pitch -}}
-    {{- if and $fits (le $blockH $hBoxH) -}}
-      {{- $best = $size -}}{{- $bestLines = $lines -}}{{- $found = true -}}
-    {{- else if eq $size $minSize -}}
-      {{- $bestLines = $lines -}}  {{- /* fallback wrap if nothing fits */ -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
+{{- /* ---- auto-fit the headline (shared with the event card) ---- */ -}}
+{{- $fit := partial "og/fit.html" (dict
+      "title" $title "m" $m "usableW" $usableW "boxH" $hBoxH
+      "min" $minSize "max" $maxSize "pitch" $pitch) -}}
+{{- $best := $fit.size -}}
+{{- $bestLines := $fit.lines -}}
 
 {{- /* ---- compose: overlay headline + URL + footer onto the base ---- */ -}}
 {{- $filters := slice -}}
@@ -157,6 +118,7 @@
 {{- end -}}
 {{- end -}}
 
-{{- $img := $base.Filter $filters -}}
-{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $img -}}
+{{- $masthead := $base.Filter $filters -}}
+{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $masthead -}}
+{{- end -}}
 {{- return $img -}}

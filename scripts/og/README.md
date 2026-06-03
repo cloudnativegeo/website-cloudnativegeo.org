@@ -1,8 +1,14 @@
 # Dynamic Open Graph cards
 
-Every single page on cloudnativegeo.org gets a generated 1200×630 Open Graph card
-(the "Masthead" design: Bonus Blue top bar + CNG wordmark, auto-fit iA Writer
-Quattro headline, Berkeley Mono footer). The card is the `og:image` for that page.
+Every single page on cloudnativegeo.org gets a generated 1200×630 Open Graph card —
+the `og:image` for that page. There are two styles:
+
+- **Masthead** (blog + generic pages): Soft White ground, Bonus Blue top bar + CNG
+  wordmark, auto-fit iA Writer Quattro headline, Berkeley Mono footer.
+- **Event** (the `events` section): the photo-negative — Bonus Blue ground, Soft
+  White bar with a blue wordmark + blue uppercase date, white headline, the site
+  tagline beneath it, and a white footer carrying `venue · time` (left) and the
+  events URL (right). A faint rule sits above the footer.
 
 Unlike the old approach (`images.Text` over `og_base.png`, blog-only), this is done
 **entirely in the Hugo build** — no headless browser, no Node step, no Vercel-specific
@@ -12,22 +18,38 @@ runtime. The build command stays `hugo --gc --minify`.
 
 | Piece | What it is | Regenerate when |
 |---|---|---|
-| `assets/og/base.png` | The static chrome (Soft White ground + Bonus Blue bar + CNG wordmark), baked once. Hugo can't draw shapes or rasterize SVG, so this is committed. | The bar/logo/colors change |
-| `data/og_metrics.json` | Per-glyph advance widths for Quattro Bold + the Berkeley Mono advance, in em units. Lets the Hugo template *measure* text to reproduce the headline auto-fit. | The fonts change |
-| `layouts/partials/og/card.html` | The renderer. Picks the per-section content (title/url/footer), greedy-wraps + binary-searches the headline size against the metrics, and overlays headline/URL/footer onto `base.png` with `images.Text`. Returns the `og.png` resource. | — |
+| `assets/og/base.png` | Masthead chrome (Soft White ground + Bonus Blue bar + white wordmark), baked once. Hugo can't draw shapes or rasterize SVG, so this is committed. | The bar/logo/colors change |
+| `assets/og/base-event.png` | Event chrome (Bonus Blue ground + Soft White bar + blue wordmark + footer rule), baked once. | The event chrome changes |
+| `data/og_metrics.json` | Per-glyph advance widths for Quattro Bold + the Berkeley Mono advance, in em units. Lets the template *measure* text to reproduce the headline auto-fit. | The fonts change |
+| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. Used by both card renderers. | — |
+| `layouts/partials/og/card.html` | Dispatcher + Masthead renderer. Hands `events` pages to `card-event.html`; otherwise overlays headline/URL/footer onto `base.png`. | — |
+| `layouts/partials/og/card-event.html` | Event renderer: overlays date/headline/tagline/footer onto `base-event.png` (or a flagship background). | — |
+| `layouts/partials/og/mono.html` | Loads the Berkeley Mono TTF (CDN at build, local fallback for dev). | — |
 | `layouts/partials/opengraph.html` | Calls `og/card.html` for any single page lacking an explicit front-matter `images:`. | — |
 
 Precedence for `og:image`: explicit front-matter `images:` → dynamic card (single
 pages) → `home_og.jpg` (home + list pages).
 
-Content mapping (footer slots auto-hide when empty; the left slot truncates with an
-ellipsis so it never collides with the right):
+Content mapping:
 
-| Slot | Blog | Event | Other page |
-|---|---|---|---|
-| url | `/blog` | `/events` | root |
-| left | `author` | `where` | — |
-| right | date (`02 Jan 2006`) | `display_date` | — |
+| Slot | Blog / page (Masthead) | Event |
+|---|---|---|
+| top-bar right | the URL | the **date** (`display_date`, uppercased) |
+| headline | `.Title` (ink) | `.Title` (white) |
+| under headline | — | site tagline (`site.Params.description`), dropped when a long headline leaves no room |
+| footer left | `author` | `venue · time` — `where` trimmed at the street separator (` - `), then `when_time` |
+| footer right | date (`02 Jan 2006`) | the URL (`cloudnativegeo.org/events`) |
+
+Footer slots auto-hide when empty; the long slot truncates with an ellipsis so it
+never collides with the other.
+
+### Flagship event backgrounds
+
+An event may set front-matter `og_card_base: <file>` (a PNG under `assets/og/`) to
+swap the flat blue ground for a baked **Bonus-Blue duotone** background — same bar,
+wordmark, headline, and footer positions, just a photographic ground. The duotone
+PNG must be pre-baked (1200×630, with the legibility gradients and chrome already
+composited); the renderer only draws flat text on top.
 
 ## Regenerating the committed artifacts
 
@@ -43,7 +65,7 @@ python3 scripts/og/gen-metrics.py     # writes data/og_metrics.json
 
 ```bash
 npm i @resvg/resvg-js              # in repo root; do NOT commit node_modules
-node scripts/og/build-base.mjs     # writes assets/og/base.png
+node scripts/og/build-base.mjs     # writes assets/og/base.png + base-event.png
 rm -rf node_modules package*.json  # clean up
 ```
 

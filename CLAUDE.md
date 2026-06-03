@@ -49,7 +49,7 @@ The `{{< img >}}` shortcode (in `layouts/shortcodes/img.html`) handles responsiv
 
 ### Open Graph cards
 
-Every single page gets a generated 1200×630 OG card (the "Masthead" design) as its `og:image`, rendered entirely in the Hugo build — no headless browser or Node step. The renderer is `layouts/partials/og/card.html` (wired in via `opengraph.html`); it overlays the page's title/URL/footer onto the committed chrome `assets/og/base.png`, sizing the headline with the font metrics in `data/og_metrics.json`. Explicit front-matter `images:` still overrides. See `scripts/og/README.md` for the full pipeline and how to regenerate `base.png` / `og_metrics.json`.
+Every single page gets a generated 1200×630 OG card as its `og:image`, rendered entirely in the Hugo build — no headless browser or Node step. Two styles: the **Masthead** card (blog + generic pages) and an inverted **Event** card (the `events` section — blue ground, white headline, `venue · time` / URL footer). The dispatcher/renderer is `layouts/partials/og/card.html` (wired in via `opengraph.html`), with `card-event.html` for events and a shared `fit.html` auto-fit; text is overlaid onto the committed chrome `assets/og/base.png` / `base-event.png`, sized via the font metrics in `data/og_metrics.json`. Explicit front-matter `images:` still overrides; flagship events can set `og_card_base:` for a duotone background. See `scripts/og/README.md` for the full pipeline.
 
 ### Front matter
 

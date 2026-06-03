@@ -1,0 +1,74 @@
+{{- /*
+  og/fit.html — reproduce card.html's fitHeadline() for the OG card renderers.
+  Greedy word-wrap + the largest font size (between .min and .max) whose wrapped
+  block fits the headline box in BOTH width and height, measured with the
+  per-glyph advances in data/og_metrics.json.
+
+  Input (dict):
+    title   — the (plain-text) headline
+    m       — site.Data.og_metrics
+    usableW — max line width in px
+    boxH    — max block height in px
+    min/max — font-size search bounds (px)
+    pitch   — line pitch as a multiple of font size
+
+  Returns (dict): { size, lines }
+*/ -}}
+{{- $title := .title -}}
+{{- $m := .m -}}
+{{- $usableW := .usableW -}}
+{{- $boxH := .boxH -}}
+{{- $minSize := .min -}}
+{{- $maxSize := .max -}}
+{{- $pitch := .pitch -}}
+
+{{- $adv := $m.quattro.adv -}}
+{{- $def := $m.quattro.default -}}
+{{- $space := $m.quattro.space -}}
+{{- $ch := $m.quattro.ch -}}
+
+{{- /* per-word advances (em units, size-independent) */ -}}
+{{- $words := slice -}}
+{{- range $w := split $title " " -}}
+  {{- if ne $w "" -}}
+    {{- $s := 0.0 -}}
+    {{- range $c := split $w "" -}}
+      {{- $s = add $s (index $adv $c | default $def) -}}
+    {{- end -}}
+    {{- $words = $words | append (dict "w" $w "adv" $s) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $best := $minSize -}}
+{{- $bestLines := slice $title -}}
+{{- $found := false -}}
+{{- range $size := seq $maxSize -1 $minSize -}}
+  {{- if not $found -}}
+    {{- $usable := math.Min $usableW (mul (mul $ch $size) 17) -}}
+    {{- $lines := slice -}}
+    {{- $cur := "" -}}
+    {{- $curEm := 0.0 -}}
+    {{- $fits := true -}}
+    {{- range $wa := $words -}}
+      {{- if gt (mul $wa.adv $size) $usable -}}{{- $fits = false -}}{{- end -}}
+      {{- $tent := $wa.adv -}}
+      {{- if ne $cur "" -}}{{- $tent = add (add $curEm $space) $wa.adv -}}{{- end -}}
+      {{- if le (mul $tent $size) $usable -}}
+        {{- $cur = cond (eq $cur "") $wa.w (printf "%s %s" $cur $wa.w) -}}
+        {{- $curEm = $tent -}}
+      {{- else -}}
+        {{- $lines = $lines | append $cur -}}
+        {{- $cur = $wa.w -}}
+        {{- $curEm = $wa.adv -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if ne $cur "" -}}{{- $lines = $lines | append $cur -}}{{- end -}}
+    {{- $blockH := mul (mul (len $lines) $size) $pitch -}}
+    {{- if and $fits (le $blockH $boxH) -}}
+      {{- $best = $size -}}{{- $bestLines = $lines -}}{{- $found = true -}}
+    {{- else if eq $size $minSize -}}
+      {{- $bestLines = $lines -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "size" $best "lines" $bestLines) -}}

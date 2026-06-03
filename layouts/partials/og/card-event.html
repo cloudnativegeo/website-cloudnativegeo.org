@@ -1,0 +1,126 @@
+{{- /*
+  og/card-event.html — the inverted "event" Open Graph card (1200×630): the
+  photo-negative of the Masthead card. Bonus Blue ground, Soft White top bar with
+  a blue wordmark + blue uppercase date, white auto-fit headline, the site tagline
+  beneath it, and a white footer carrying `venue · time` (left) and the events URL
+  (right). Matches the approved mockup (CNG-London event card).
+
+  Static chrome (blue ground, white bar, blue wordmark, footer rule) is the
+  committed assets/og/base-event.png. Flagship events may set front-matter
+  `og_card_base: <file-under-assets/og/>` to swap in a baked duotone background.
+
+  Called with the page as context; returns the og.png resource.
+*/ -}}
+{{- $page := . -}}
+{{- $m := site.Data.og_metrics -}}
+
+{{- /* ---- content ---- */ -}}
+{{- $title := $page.Title | plainify | htmlUnescape | chomp -}}
+{{- $url := "cloudnativegeo.org/events" -}}
+{{- $tagline := site.Params.description | plainify | chomp -}}
+{{- $date := "" -}}
+{{- with $page.Params.display_date -}}{{- $date = upper . -}}{{- end -}}
+
+{{- /* venue = the part of `where` before the street address; keep "Virtual" etc. */ -}}
+{{- $venue := "" -}}
+{{- with $page.Params.where -}}
+  {{- $venue = index (split (replace . " – " " - ") " - ") 0 | chomp -}}
+{{- end -}}
+{{- $time := $page.Params.when_time | default "" -}}
+{{- $meta := $venue -}}
+{{- if and $venue $time -}}{{- $meta = printf "%s · %s" $venue $time -}}{{- else if $time -}}{{- $meta = $time -}}{{- end -}}
+
+{{- /* ---- geometry (px on the 1200×630 canvas) ---- */ -}}
+{{- $padX := 88 -}}
+{{- $usableW := 1024 -}}
+{{- $rightEdge := 1112 -}}
+{{- $headTop := 196 -}}        {{- /* headline is top-anchored (not centered) */ -}}
+{{- $headBoxH := 210 -}}
+{{- $pitch := 1.04 -}}
+{{- $minSize := 34 -}}
+{{- $maxSize := 92 -}}
+{{- $tagSize := 30 -}}
+{{- $tagPitch := 1.25 -}}
+{{- $tagMaxW := 520 -}}
+{{- $footSize := 22 -}}
+{{- $footY := 524 -}}
+{{- $ruleY := 500 -}}          {{- /* baked into base-event.png; tagline must clear it */ -}}
+{{- $white := "#F2F4F6" -}}
+{{- $blue := "#2126F7" -}}
+
+{{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
+{{- $monoBold := partial "og/mono.html" "Bold" -}}
+{{- $monoReg := partial "og/mono.html" "Regular" -}}
+
+{{- $baseName := "og/base-event.png" -}}
+{{- with $page.Params.og_card_base -}}{{- $baseName = printf "og/%s" . -}}{{- end -}}
+{{- $base := resources.Get $baseName | default (resources.Get "og/base-event.png") -}}
+
+{{- $filters := slice -}}
+
+{{- /* Date — Berkeley Mono Bold 24, blue, right-aligned in the white bar */ -}}
+{{- if and $monoBold $date -}}
+  {{- $w := mul (mul (len $date) $m.mono.adv) 24 -}}
+  {{- $filters = $filters | append (images.Text $date (dict
+        "color" $blue "size" 24 "font" $monoBold
+        "x" (int (sub $rightEdge $w)) "y" 44 )) -}}
+{{- end -}}
+
+{{- /* Headline — Quattro Bold, white, left-aligned, top-anchored */ -}}
+{{- $fit := partial "og/fit.html" (dict
+      "title" $title "m" $m "usableW" $usableW "boxH" $headBoxH
+      "min" $minSize "max" $maxSize "pitch" $pitch) -}}
+{{- $linePitch := mul $fit.size $pitch -}}
+{{- range $i, $line := $fit.lines -}}
+  {{- $y := int (add $headTop (mul $i $linePitch)) -}}
+  {{- $filters = $filters | append (images.Text $line (dict
+        "color" $white "size" $fit.size "font" $quattro
+        "x" $padX "y" $y )) -}}
+{{- end -}}
+
+{{- /* Tagline — Berkeley Mono Regular 30, white, under the headline. Wrapped by
+       width; drawn only when it clears the footer rule (long headlines skip it). */ -}}
+{{- $headBottom := add $headTop (mul (len $fit.lines) $linePitch) -}}
+{{- $tagTop := add $headBottom 30 -}}
+{{- if and $monoReg $tagline -}}
+  {{- $charW := mul $m.mono.adv $tagSize -}}
+  {{- $maxChars := int (math.Floor (div $tagMaxW $charW)) -}}
+  {{- $tagLines := slice -}}
+  {{- $cur := "" -}}
+  {{- range $w := split $tagline " " -}}
+    {{- $t := cond (eq $cur "") $w (printf "%s %s" $cur $w) -}}
+    {{- if le (len $t) $maxChars -}}{{- $cur = $t -}}
+    {{- else -}}{{- $tagLines = $tagLines | append $cur -}}{{- $cur = $w -}}{{- end -}}
+  {{- end -}}
+  {{- if ne $cur "" -}}{{- $tagLines = $tagLines | append $cur -}}{{- end -}}
+  {{- $tagBlockH := mul (mul (len $tagLines) $tagSize) $tagPitch -}}
+  {{- if le (add $tagTop $tagBlockH) (sub $ruleY 24) -}}
+    {{- range $i, $line := $tagLines -}}
+      {{- $y := int (add $tagTop (mul $i (mul $tagSize $tagPitch))) -}}
+      {{- $filters = $filters | append (images.Text $line (dict
+            "color" $white "size" $tagSize "font" $monoReg
+            "x" $padX "y" $y )) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Footer — Berkeley Mono Bold 22, white: venue·time (left), URL (right) */ -}}
+{{- if $monoBold -}}
+  {{- $urlW := mul (mul (len $url) $m.mono.adv) $footSize -}}
+  {{- $filters = $filters | append (images.Text $url (dict
+        "color" $white "size" $footSize "font" $monoBold
+        "x" (int (sub $rightEdge $urlW)) "y" $footY )) -}}
+  {{- with $meta -}}
+    {{- $charW := mul $m.mono.adv $footSize -}}
+    {{- $avail := sub (sub (sub $rightEdge $padX) $urlW) 28.0 -}}
+    {{- $maxChars := int (math.Floor (div $avail $charW)) -}}
+    {{- $txt := . -}}
+    {{- if gt (len $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
+    {{- $filters = $filters | append (images.Text $txt (dict
+          "color" $white "size" $footSize "font" $monoBold "x" $padX "y" $footY )) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $img := $base.Filter $filters -}}
+{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $img -}}
+{{- return $img -}}
