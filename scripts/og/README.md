@@ -1,14 +1,19 @@
 # Dynamic Open Graph cards
 
-Every single page on cloudnativegeo.org gets a generated 1200×630 Open Graph card —
-the `og:image` for that page. There are two styles:
+Every page on cloudnativegeo.org gets a generated 1200×630 Open Graph card — the
+`og:image` for that page. There are three styles, picked by page type:
 
-- **Masthead** (blog + generic pages): Soft White ground, Bonus Blue top bar + CNG
-  wordmark, auto-fit iA Writer Quattro headline, Berkeley Mono footer.
-- **Event** (the `events` section): the photo-negative — Bonus Blue ground, Soft
+- **Blog posts → Masthead**: Soft White ground, Bonus Blue top bar + white CNG
+  wordmark, auto-fit iA Writer Quattro headline in ink, Berkeley Mono footer
+  (author · date).
+- **Single event pages → Event**: the photo-negative — Bonus Blue ground, Soft
   White bar with a blue wordmark + blue uppercase date, white headline, the site
-  tagline beneath it, and a white footer carrying `venue · time` (left) and the
-  events URL (right). A faint rule sits above the footer.
+  tagline beneath it, a white footer carrying `venue · time` (left) and the events
+  URL (right), over a faint rule. Flagship events can use a duotone photo ground.
+- **Home, section landings (/blog, /events), and all generic pages → Brand**:
+  full-bleed Bonus Blue, **no bar** — a larger white wordmark sits directly on the
+  blue, with the white title + tagline centered, a faint rule, and the page URL
+  bottom-right.
 
 Unlike the old approach (`images.Text` over `og_base.png`, blog-only), this is done
 **entirely in the Hugo build** — no headless browser, no Node step, no Vercel-specific
@@ -20,28 +25,32 @@ runtime. The build command stays `hugo --gc --minify`.
 |---|---|---|
 | `assets/og/base.png` | Masthead chrome (Soft White ground + Bonus Blue bar + white wordmark), baked once. Hugo can't draw shapes or rasterize SVG, so this is committed. | The bar/logo/colors change |
 | `assets/og/base-event.png` | Event chrome (Bonus Blue ground + Soft White bar + blue wordmark + footer rule), baked once. | The event chrome changes |
+| `assets/og/base-event-chrome.png` | Transparent event chrome + legibility gradients, composited over a duotone photo for flagship events. | The event chrome changes |
+| `assets/og/base-brand.png` | Brand chrome: full-bleed Bonus Blue + a larger white wordmark (no bar) + footer rule. | The brand chrome changes |
 | `data/og_metrics.json` | Per-glyph advance widths for Quattro Bold + the Berkeley Mono advance, in em units. Lets the template *measure* text to reproduce the headline auto-fit. | The fonts change |
-| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. Used by both card renderers. | — |
-| `layouts/partials/og/card.html` | Dispatcher + Masthead renderer. Hands `events` pages to `card-event.html`; otherwise overlays headline/URL/footer onto `base.png`. | — |
-| `layouts/partials/og/card-event.html` | Event renderer: overlays date/headline/tagline/footer onto `base-event.png` (or a flagship background). | — |
+| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. Used by all renderers. | — |
+| `layouts/partials/og/card.html` | Dispatcher + Masthead (blog) renderer. Routes single event pages to `card-event.html`, everything else (home, lists, generic pages) to `card-brand.html`. | — |
+| `layouts/partials/og/card-event.html` | Event renderer: date/headline/tagline/footer onto `base-event.png` (or a duotone photo ground). | — |
+| `layouts/partials/og/card-brand.html` | Brand renderer: title/tagline/URL onto `base-brand.png`. | — |
 | `layouts/partials/og/mono.html` | Loads the Berkeley Mono TTF (CDN at build, local fallback for dev). | — |
-| `layouts/partials/opengraph.html` | Calls `og/card.html` for any single page lacking an explicit front-matter `images:`. | — |
+| `layouts/partials/opengraph.html` | Picks the card per page type and emits the og:image meta. | — |
 
-Precedence for `og:image`: explicit front-matter `images:` → dynamic card (single
-pages) → `home_og.jpg` (home + list pages).
+Precedence for `og:image`: every page gets a card by default. A blog or generic
+single page may override with an explicit front-matter `images:`; events keep
+their card (`images:` is the in-page hero) and home/list pages keep the brand card.
 
 Content mapping:
 
-| Slot | Blog / page (Masthead) | Event |
-|---|---|---|
-| top-bar right | the URL | the **date** (`display_date`, uppercased) |
-| headline | `.Title` (ink) | `.Title` (white) |
-| under headline | — | site tagline (`site.Params.description`), dropped when a long headline leaves no room |
-| footer left | `author` | `venue · time` — `where` trimmed at the street separator (` - `), then `when_time` |
-| footer right | date (`02 Jan 2006`) | the URL (`cloudnativegeo.org/events`) |
+| Slot | Blog (Masthead) | Single event | Brand (home/lists/pages) |
+|---|---|---|---|
+| top-bar right | the URL | the **date** (`display_date`, uppercased) | — (no bar) |
+| headline | `.Title` (ink) | `.Title` (white) | `.Title` (white, " - CNG" stripped) |
+| under headline | — | site tagline, dropped if the headline is long | site tagline |
+| footer left | `author` | `venue · time` (`where` before ` - `, then `when_time`) | — |
+| footer right | date (`02 Jan 2006`) | events URL | the page URL |
 
-Footer slots auto-hide when empty; the long slot truncates with an ellipsis so it
-never collides with the other.
+Footer slots auto-hide when empty; the long event slot truncates with an ellipsis
+so it never collides with the other.
 
 ### Flagship event backgrounds (duotone photo)
 

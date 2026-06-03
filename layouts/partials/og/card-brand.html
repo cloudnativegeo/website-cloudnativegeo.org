@@ -1,0 +1,91 @@
+{{- /*
+  og/card-brand.html — the "brand / landing" Open Graph card (1200×630) for the
+  home page, the section landings (/blog, /events), and generic pages (/about,
+  /join, …). These have no author/date/venue, so the card leads with the page
+  title and the site tagline.
+
+  Full-bleed Bonus Blue, NO bar: a larger white wordmark sits directly on the blue
+  (baked into base-brand.png), the title + tagline are centered in white, a faint
+  rule sits above the footer, and the page URL is bottom-right. Returns the og.png.
+*/ -}}
+{{- $page := . -}}
+{{- $m := site.Data.og_metrics -}}
+
+{{- /* title (drop the " - CNG" suffix the site title carries; the wordmark says it) */ -}}
+{{- $title := $page.Title | plainify | htmlUnescape | chomp -}}
+{{- $title = replace $title " - CNG" "" -}}
+{{- $tagline := site.Params.description | plainify | chomp -}}
+{{- $url := printf "cloudnativegeo.org%s" (strings.TrimSuffix "/" $page.RelPermalink) -}}
+
+{{- /* ---- geometry ---- */ -}}
+{{- $padX := 88 -}}
+{{- $usableW := 1024 -}}
+{{- $rightEdge := 1112 -}}
+{{- $areaTop := 184 -}}        {{- /* below the (larger, lower) wordmark */ -}}
+{{- $areaBot := 480 -}}        {{- /* above the footer rule (500) */ -}}
+{{- $pitch := 1.04 -}}
+{{- $minSize := 40 -}}
+{{- $maxSize := 92 -}}
+{{- $titleBoxH := 250 -}}
+{{- $tagSize := 30 -}}
+{{- $tagPitch := 1.25 -}}
+{{- $tagMaxW := 600 -}}
+{{- $tagGap := 30 -}}
+{{- $footSize := 24 -}}
+{{- $footY := 524 -}}
+{{- $white := "#F2F4F6" -}}
+
+{{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
+{{- $monoReg := partial "og/mono.html" "Regular" -}}
+{{- $base := resources.Get "og/base-brand.png" -}}
+{{- $filters := slice -}}
+
+{{- /* fit title; wrap tagline; center the group between the wordmark and the rule */ -}}
+{{- $fit := partial "og/fit.html" (dict
+      "title" $title "m" $m "usableW" $usableW "boxH" $titleBoxH
+      "min" $minSize "max" $maxSize "pitch" $pitch) -}}
+{{- $linePitch := mul $fit.size $pitch -}}
+{{- $titleH := mul (len $fit.lines) $linePitch -}}
+
+{{- $tagLines := slice -}}
+{{- if and $monoReg $tagline -}}
+  {{- $charW := mul $m.mono.adv $tagSize -}}
+  {{- $maxChars := int (math.Floor (div $tagMaxW $charW)) -}}
+  {{- $cur := "" -}}
+  {{- range $w := split $tagline " " -}}
+    {{- $t := cond (eq $cur "") $w (printf "%s %s" $cur $w) -}}
+    {{- if le (len $t) $maxChars -}}{{- $cur = $t -}}
+    {{- else -}}{{- $tagLines = $tagLines | append $cur -}}{{- $cur = $w -}}{{- end -}}
+  {{- end -}}
+  {{- if ne $cur "" -}}{{- $tagLines = $tagLines | append $cur -}}{{- end -}}
+{{- end -}}
+{{- $tagH := cond (gt (len $tagLines) 0) (add $tagGap (mul (len $tagLines) (mul $tagSize $tagPitch))) 0.0 -}}
+
+{{- $groupH := add $titleH $tagH -}}
+{{- $top := add $areaTop (div (sub (sub $areaBot $areaTop) $groupH) 2) -}}
+
+{{- /* Title — Quattro Bold, white, left-aligned */ -}}
+{{- range $i, $line := $fit.lines -}}
+  {{- $y := int (add $top (mul $i $linePitch)) -}}
+  {{- $filters = $filters | append (images.Text $line (dict
+        "color" $white "size" $fit.size "font" $quattro "x" $padX "y" $y )) -}}
+{{- end -}}
+
+{{- /* Tagline — Berkeley Mono Regular, white, under the title */ -}}
+{{- $tagTop := add (add $top $titleH) $tagGap -}}
+{{- range $i, $line := $tagLines -}}
+  {{- $y := int (add $tagTop (mul $i (mul $tagSize $tagPitch))) -}}
+  {{- $filters = $filters | append (images.Text $line (dict
+        "color" $white "size" $tagSize "font" $monoReg "x" $padX "y" $y )) -}}
+{{- end -}}
+
+{{- /* URL — Berkeley Mono Regular, white, bottom-right */ -}}
+{{- with $monoReg -}}
+  {{- $w := mul (mul (len $url) $m.mono.adv) $footSize -}}
+  {{- $filters = $filters | append (images.Text $url (dict
+        "color" $white "size" $footSize "font" . "x" (int (sub $rightEdge $w)) "y" $footY )) -}}
+{{- end -}}
+
+{{- $img := $base.Filter $filters -}}
+{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $img -}}
+{{- return $img -}}

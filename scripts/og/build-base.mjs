@@ -43,6 +43,9 @@ const WORDMARK_D =
 // Wordmark <g> at the standard bar position, in a given color.
 const wordmark = (fill) =>
   `<g transform="translate(${PAD_X}, ${LOGO_Y}) scale(${LOGO_H / LOGO_VB_H})"><path d="${WORDMARK_D}" fill="${fill}"/></g>`;
+// Wordmark at an arbitrary height/y (for the bar-less brand card).
+const wordmarkAt = (fill, h, y) =>
+  `<g transform="translate(${PAD_X}, ${y}) scale(${h / LOGO_VB_H})"><path d="${WORDMARK_D}" fill="${fill}"/></g>`;
 
 // Masthead base (blog/pages): Soft White ground, Bonus Blue bar, white wordmark.
 const baseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
@@ -84,11 +87,22 @@ const eventChromeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" hei
   ${RULE}
 </svg>`;
 
+// Brand / landing base (home, /about, /join, section landings): full-bleed Bonus
+// Blue, NO bar — a larger white wordmark sits directly on the blue, with the same
+// faint footer rule. Title/tagline/URL are drawn on top (see card-brand.html).
+const BRAND_LOGO_H = 76;   // larger than the bar logo; sits lower for crop safety
+const brandSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect x="0" y="0" width="1200" height="630" fill="${BONUS_BLUE}"/>
+  ${wordmarkAt(SOFT_WHITE, BRAND_LOGO_H, 80)}
+  ${RULE}
+</svg>`;
+
 fs.mkdirSync(OG, { recursive: true });
 for (const [name, svg] of [
   ["base.png", baseSvg],
   ["base-event.png", eventSvg],
   ["base-event-chrome.png", eventChromeSvg],
+  ["base-brand.png", brandSvg],
 ]) {
   const png = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
   fs.writeFileSync(path.join(OG, name), png);

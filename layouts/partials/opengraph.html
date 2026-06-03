@@ -3,19 +3,14 @@
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
 
-{{- /* og:image precedence:
-        - Events: always the dynamic event card (the brand pattern). `images:` is
-          the in-page hero, not the social image; a flagship `og_card_photo`
-          becomes the card's duotone ground.
-        - Other single pages: explicit `images:` wins, else the Masthead card.
-        - Home / list pages: the home_og.jpg fallback. */ -}}
-{{- $useCard := false -}}
-{{- if .IsPage -}}
-  {{- if eq .Section "events" -}}
-    {{- $useCard = or .Params.og_card_photo (not .Params.images) -}}
-  {{- else -}}
-    {{- $useCard = not .Params.images -}}
-  {{- end -}}
+{{- /* og:image: every CNG page gets a dynamic card by default —
+        events → event card · blog posts → Masthead · home/lists/pages → brand card.
+        Override: a blog or generic single page may pin its own social image with
+        front-matter `images:`. Events keep their card (images: is the in-page
+        hero); home + list pages keep the brand card. */ -}}
+{{- $useCard := true -}}
+{{- if and .IsPage (ne .Section "events") .Params.images -}}
+  {{- $useCard = false -}}
 {{- end -}}
 {{- if $useCard -}}
   {{- with partial "og/card.html" . -}}
@@ -24,11 +19,7 @@
   <meta property="og:image:height" content="{{ .Height }}" />
   {{- end -}}
 {{- else -}}
-  {{- with $.Params.images -}}
-  {{- range first 6 . }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
-  {{- else -}}
-  <meta property="og:image" content="{{ "home_og.jpg" | absURL }}"/>
-  {{- end -}}
+  {{- range first 6 .Params.images }}<meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
 {{- end -}}
 
 {{- if .IsPage }}

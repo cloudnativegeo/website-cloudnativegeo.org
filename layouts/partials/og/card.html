@@ -18,13 +18,15 @@
 {{- $page := . -}}
 {{- $m := site.Data.og_metrics -}}
 
-{{- /* Events get the inverted "event" card (blue ground, white headline,
-       where·when footer); everything else gets the "Masthead" card below.
-       Single return at the end (Hugo dislikes a second, conditional return). */ -}}
+{{- /* Three card styles, one return at the end (Hugo dislikes a second,
+       conditional return):
+         events           → inverted event card (card-event.html)
+         blog posts       → Masthead card (the block below)
+         home/lists/pages → brand / landing card (card-brand.html) */ -}}
 {{- $img := "" -}}
-{{- if eq $page.Section "events" -}}
+{{- if and $page.IsPage (eq $page.Section "events") -}}
 {{- $img = partial "og/card-event.html" $page -}}
-{{- else -}}
+{{- else if and $page.IsPage (eq $page.Section "blog") -}}
 
 {{- /* ---- content model: title + url + footer slots, by section ---- */ -}}
 {{- $title := $page.Title -}}
@@ -120,5 +122,7 @@
 
 {{- $masthead := $base.Filter $filters -}}
 {{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $masthead -}}
+{{- else -}}
+{{- $img = partial "og/card-brand.html" $page -}}
 {{- end -}}
 {{- return $img -}}
