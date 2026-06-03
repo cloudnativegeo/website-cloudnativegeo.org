@@ -32,12 +32,8 @@
 {{- $padX := 88 -}}
 {{- $usableW := 1024 -}}
 {{- $rightEdge := 1112 -}}
-{{- $hBoxTop := 156 -}}        {{- /* headline centered between the bar and the rule */ -}}
-{{- $hBoxH := 344 -}}          {{- /* 156 → 500 (the rule) */ -}}
-{{- $pitch := 1.04 -}}
-{{- $minSize := 34 -}}
-{{- $maxSize := 92 -}}
-{{- $ruleY := 500 -}}          {{- /* baked into base-event.png */ -}}
+{{- $hBoxTop := 156 -}}        {{- /* headline centered between the bar and the rule (156 → 500) */ -}}
+{{- $hBoxH := 344 -}}
 {{- $footY := 518 -}}          {{- /* location + date baseline */ -}}
 {{- $footSize := 28 -}}
 {{- $timeY := 548 -}}          {{- /* time, tucked under the date */ -}}
@@ -69,36 +65,18 @@
   {{- end -}}
 {{- end -}}
 
-{{- $filters := slice -}}
+{{- /* "EVENT" eyebrow (Sunshine Yellow) + white headline, centered as a group */ -}}
+{{- $filters := partial "og/headline.html" (dict
+      "title" $title "m" $m "font" $quattro "color" $white
+      "eyebrow" "EVENT" "eyeColor" "#FFD626" "eyeFont" $monoBold
+      "padX" $padX "usableW" $usableW "boxTop" $hBoxTop "boxH" $hBoxH
+      "min" 34 "max" 92 "pitch" 1.04 "eyeSize" 24 "eyeGap" 16) -}}
 
 {{- /* URL — Berkeley Mono Regular 24, blue, right-aligned in the white bar */ -}}
 {{- with $monoReg -}}
   {{- $w := mul (mul (len $url) $m.mono.adv) 24 -}}
   {{- $filters = $filters | append (images.Text $url (dict
         "color" $blue "size" 24 "font" . "x" (int (sub $rightEdge $w)) "y" 44 )) -}}
-{{- end -}}
-
-{{- /* Eyebrow + headline — centered as a group. Eyebrow: uppercase mono in
-       Sunshine Yellow above the white headline. */ -}}
-{{- $eyebrow := "EVENT" -}}
-{{- $eyeSize := 24 -}}
-{{- $eyeGap := 16 -}}
-{{- $fit := partial "og/fit.html" (dict
-      "title" $title "m" $m "usableW" $usableW "boxH" $hBoxH
-      "min" $minSize "max" $maxSize "pitch" $pitch) -}}
-{{- $linePitch := mul $fit.size $pitch -}}
-{{- $blockH := mul (len $fit.lines) $linePitch -}}
-{{- $groupH := add (add $eyeSize $eyeGap) $blockH -}}
-{{- $groupTop := add $hBoxTop (div (sub $hBoxH $groupH) 2) -}}
-{{- with $monoBold -}}
-  {{- $filters = $filters | append (images.Text $eyebrow (dict
-        "color" "#FFD626" "size" $eyeSize "font" . "x" $padX "y" (int $groupTop) )) -}}
-{{- end -}}
-{{- $blockTop := add $groupTop (add $eyeSize $eyeGap) -}}
-{{- range $i, $line := $fit.lines -}}
-  {{- $y := int (add $blockTop (mul $i $linePitch)) -}}
-  {{- $filters = $filters | append (images.Text $line (dict
-        "color" $white "size" $fit.size "font" $quattro "x" $padX "y" $y )) -}}
 {{- end -}}
 
 {{- /* Footer (mirrors the blog card): location bottom-left; date bottom-right with

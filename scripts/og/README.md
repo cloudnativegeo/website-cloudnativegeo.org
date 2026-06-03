@@ -29,10 +29,12 @@ runtime. The build command stays `hugo --gc --minify`.
 | `assets/og/base-event-chrome.png` | Transparent event chrome + legibility gradients, composited over a duotone photo for flagship events. | The event chrome changes |
 | `assets/og/base-brand.png` | Brand chrome: full-bleed Bonus Blue + a larger white wordmark (no bar) + footer rule. | The brand chrome changes |
 | `data/og_metrics.json` | Per-glyph advance widths for Quattro Bold + the Berkeley Mono advance, in em units. Lets the template *measure* text to reproduce the headline auto-fit. | The fonts change |
-| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. Used by all renderers. | — |
-| `layouts/partials/og/card.html` | Dispatcher + Masthead (blog) renderer. Routes single event pages to `card-event.html`, everything else (home, lists, generic pages) to `card-brand.html`. | — |
-| `layouts/partials/og/card-event.html` | Event renderer: date/headline/tagline/footer onto `base-event.png` (or a duotone photo ground). | — |
+| `layouts/partials/og/card.html` | Thin dispatcher: single event → `card-event.html`, blog post → `card-blog.html`, everything else → `card-brand.html`. | — |
+| `layouts/partials/og/card-blog.html` | Blog (Masthead) renderer: eyebrow/headline/URL/footer onto `base.png`. | — |
+| `layouts/partials/og/card-event.html` | Event renderer: eyebrow/headline/URL/footer onto `base-event.png` (or a duotone photo ground). | — |
 | `layouts/partials/og/card-brand.html` | Brand renderer: title/tagline/URL onto `base-brand.png`. | — |
+| `layouts/partials/og/headline.html` | Shared eyebrow + auto-fit headline, centered as a group; returns the filter slice. Used by the blog + event cards. | — |
+| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. | — |
 | `layouts/partials/og/mono.html` | Loads the Berkeley Mono TTF (CDN at build, local fallback for dev). | — |
 | `layouts/partials/opengraph.html` | Picks the card per page type and emits the og:image meta. | — |
 

@@ -1,138 +1,21 @@
 {{- /*
-  og/card.html — build a dynamic Open Graph card (1200×630) for a page and return
-  the rendered PNG resource. Reproduces the approved "Masthead" design entirely in
-  the Hugo build (no headless browser): the static chrome is the committed
-  assets/og/base.png; this partial overlays the dynamic text with images.Text.
+  og/card.html — dispatch a page to the right Open Graph card renderer and return
+  the rendered 1200×630 og.png resource. Called from opengraph.html.
 
-  The headline auto-fit mirrors card.html's fitHeadline(): greedy word-wrap +
-  largest font size (26–86px) that fits the headline box in width AND height,
-  measured with the per-glyph advances in data/og_metrics.json.
+    single event page            → og/card-event.html
+    blog post                    → og/card-blog.html
+    home / lists / generic pages → og/card-brand.html
 
-  Call with the page as context. Returns the og.png resource, or nothing if the
-  page opts out (explicit front-matter images take precedence in opengraph.html).
-
-  Geometry constants below mirror design_handoff_og_cards/card.html and were
-  calibrated against rendered output; change them together with the design.
+  All three overlay text onto a committed assets/og/base*.png with images.Text,
+  sizing the headline via the shared og/fit.html + og/headline.html helpers.
 */ -}}
-
 {{- $page := . -}}
-{{- $m := site.Data.og_metrics -}}
-
-{{- /* Three card styles, one return at the end (Hugo dislikes a second,
-       conditional return):
-         events           → inverted event card (card-event.html)
-         blog posts       → Masthead card (the block below)
-         home/lists/pages → brand / landing card (card-brand.html) */ -}}
 {{- $img := "" -}}
 {{- if and $page.IsPage (eq $page.Section "events") -}}
-{{- $img = partial "og/card-event.html" $page -}}
+  {{- $img = partial "og/card-event.html" $page -}}
 {{- else if and $page.IsPage (eq $page.Section "blog") -}}
-
-{{- /* ---- content model: title + url + footer slots, by section ---- */ -}}
-{{- $title := $page.Title -}}
-{{- $url := "cloudnativegeo.org" -}}
-{{- $left := "" -}}
-{{- $right := "" -}}
-{{- if eq $page.Section "blog" -}}
-  {{- $url = "cloudnativegeo.org/blog" -}}
-  {{- with $page.Params.author -}}{{- $left = . -}}{{- end -}}
-  {{- $right = $page.Date.Format "02 January 2006" -}}
-{{- end -}}
-
-{{- /* author front-matter can be markdown ([Name](url)); strip to plain text */ -}}
-{{- $left = $left | $page.RenderString | plainify | htmlUnescape | chomp -}}
-{{- $title = $title | plainify | htmlUnescape | chomp -}}
-
-{{- /* ---- geometry (px on the 1200×630 canvas) ---- */ -}}
-{{- $padX := 88 -}}
-{{- $usableW := 1024 -}}      {{- /* 1200 − 2·88 */ -}}
-{{- $rightEdge := 1112 -}}    {{- /* 1200 − 88 */ -}}
-{{- $hBoxTop := 156 -}}       {{- /* headline box: below the 112px bar + gap */ -}}
-{{- $hBoxH := 344 -}}         {{- /* headline box height (top 156 → 500) */ -}}
-{{- $pitch := 1.04 -}}        {{- /* line pitch as a multiple of font size */ -}}
-{{- $minSize := 26 -}}
-{{- $maxSize := 86 -}}
-{{- $ink := "#2F343B" -}}
-{{- $soft := "#F2F4F6" -}}
-
-{{- /* iA Writer Quattro is OFL-licensed and committed in-repo. Berkeley Mono is
-       licensed and must NOT live in this public repo, so it's fetched from the
-       private CDN at build time — with a local fallback so `assets/fonts/
-       BerkeleyMono-*.ttf` (gitignored) is used during local dev when present. */ -}}
-{{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
-{{- $monoBold := partial "og/mono.html" "Bold" -}}
-{{- $monoReg := partial "og/mono.html" "Regular" -}}
-{{- $base := resources.Get "og/base.png" -}}
-
-{{- /* ---- auto-fit the headline (shared with the event card) ---- */ -}}
-{{- $fit := partial "og/fit.html" (dict
-      "title" $title "m" $m "usableW" $usableW "boxH" $hBoxH
-      "min" $minSize "max" $maxSize "pitch" $pitch) -}}
-{{- $best := $fit.size -}}
-{{- $bestLines := $fit.lines -}}
-
-{{- /* ---- compose: overlay headline + URL + footer onto the base ---- */ -}}
-{{- $filters := slice -}}
-
-{{- /* URL — Berkeley Mono 24, Soft White, right-aligned in the blue bar */ -}}
-{{- with $monoReg -}}
-  {{- $urlW := mul (mul (len $url) $m.mono.adv) 24 -}}
-  {{- $filters = $filters | append (images.Text $url (dict
-        "color" $soft "size" 24 "font" .
-        "x" (int (sub $rightEdge $urlW)) "y" 44 )) -}}
-{{- end -}}
-
-{{- /* Eyebrow + headline — vertically centered as a group. Eyebrow is a small
-       uppercase mono label in Bonus Blue above the ink headline. */ -}}
-{{- $eyebrow := "BLOG POST" -}}
-{{- $eyeSize := 24 -}}
-{{- $eyeGap := 16 -}}
-{{- $linePitch := mul $best $pitch -}}
-{{- $blockH := mul (len $bestLines) $linePitch -}}
-{{- $groupH := add (add $eyeSize $eyeGap) $blockH -}}
-{{- $groupTop := add $hBoxTop (div (sub $hBoxH $groupH) 2) -}}
-{{- with $monoBold -}}
-  {{- $filters = $filters | append (images.Text $eyebrow (dict
-        "color" "#2126F7" "size" $eyeSize "font" . "x" $padX "y" (int $groupTop) )) -}}
-{{- end -}}
-{{- $blockTop := add $groupTop (add $eyeSize $eyeGap) -}}
-{{- range $i, $line := $bestLines -}}
-  {{- $y := int (add $blockTop (mul $i $linePitch)) -}}
-  {{- $filters = $filters | append (images.Text $line (dict
-        "color" $ink "size" $best "font" $quattro
-        "x" $padX "y" $y )) -}}
-{{- end -}}
-
-{{- /* Footer (both slots need Berkeley Mono Bold; skip entirely if unavailable) */ -}}
-{{- if $monoBold -}}
-{{- /* Footer right — Berkeley Mono Bold 28, ink, right-aligned */ -}}
-{{- $rightW := 0.0 -}}
-{{- with $right -}}
-  {{- $rightW = mul (mul (len .) $m.mono.adv) 28 -}}
-  {{- $filters = $filters | append (images.Text . (dict
-        "color" $ink "size" 28 "font" $monoBold
-        "x" (int (sub $rightEdge $rightW)) "y" 518 )) -}}
-{{- end -}}
-
-{{- /* Footer left — Berkeley Mono Bold 28, ink, left-aligned. Truncate with an
-       ellipsis so a long author list / venue never collides with the date. */ -}}
-{{- with $left -}}
-  {{- $charW := mul $m.mono.adv 28 -}}
-  {{- $gap := cond (gt $rightW 0.0) 28.0 0.0 -}}
-  {{- $avail := sub (sub (sub $rightEdge $padX) $rightW) $gap -}}
-  {{- $maxChars := int (math.Floor (div $avail $charW)) -}}
-  {{- $txt := . -}}
-  {{- if gt (len $txt) $maxChars -}}
-    {{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}
-  {{- end -}}
-  {{- $filters = $filters | append (images.Text $txt (dict
-        "color" $ink "size" 28 "font" $monoBold "x" $padX "y" 518 )) -}}
-{{- end -}}
-{{- end -}}
-
-{{- $masthead := $base.Filter $filters -}}
-{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $masthead -}}
+  {{- $img = partial "og/card-blog.html" $page -}}
 {{- else -}}
-{{- $img = partial "og/card-brand.html" $page -}}
+  {{- $img = partial "og/card-brand.html" $page -}}
 {{- end -}}
 {{- return $img -}}

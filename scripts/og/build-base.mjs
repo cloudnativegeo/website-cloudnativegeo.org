@@ -1,20 +1,18 @@
-// build-base.mjs — bake the static OG card "chrome" to assets/og/base.png (1200×630).
+// build-base.mjs — bake the static OG card "chrome" to assets/og/base*.png (1200×630).
 //
-// Hugo can't draw shapes or rasterize SVG, so the parts of the card that never
-// change — the Soft White ground, the full-bleed Bonus Blue top bar, and the
-// CNG wordmark — are rendered ONCE here and committed. At build time the Hugo
-// partial (layouts/partials/opengraph.html) overlays only the dynamic text
-// (URL, headline, footer) onto this base with images.Text.
+// Hugo can't draw shapes or rasterize SVG, so the parts of each card that never
+// change — grounds, bars, the CNG wordmark, the footer rule — are rendered ONCE
+// here and committed. At build time the og/card-*.html partials overlay only the
+// dynamic text (URL, headline, footer) onto these bases with images.Text. Outputs:
+//   base.png · base-event.png · base-event-chrome.png · base-brand.png
 //
 // This is a one-time / on-design-change step, NOT part of `hugo` builds. Run it
-// from a throwaway dir so the dependency never lands in the repo:
+// from the repo root so the dependency never lands in git:
 //
-//   mkdir -p /tmp/ogbake && cd /tmp/ogbake && npm i @resvg/resvg-js
-//   node /ABS/PATH/scripts/og/build-base.mjs   # writes assets/og/base.png
+//   npm i @resvg/resvg-js && node scripts/og/build-base.mjs && rm -rf node_modules package*.json
 //
-// Geometry mirrors design_handoff_og_cards/card.html exactly:
-//   card 1200×630 · padding 0 88 76 · top bar padding 32 88, logo 48px tall
-//   → bar height = 48 + 2*32 = 112px, wordmark at x=88 y=32.
+// Geometry: card 1200×630; top bar height = 48px logo + 2*32px padding = 112px;
+// bar wordmark at x=88 y=32; footer rule at y=500.
 
 import { Resvg } from "@resvg/resvg-js";
 import { fileURLToPath } from "node:url";
@@ -31,9 +29,7 @@ const PAD_X = 88;
 const RIGHT_EDGE = 1112;
 const BAR_H = 112; // 48px logo + 2 * 32px padding
 const LOGO_H = 48;
-const LOGO_VB_W = 702.61; // wordmark viewBox width
-const LOGO_VB_H = 311.75; // wordmark viewBox height
-const LOGO_W = (LOGO_H * LOGO_VB_W) / LOGO_VB_H;
+const LOGO_VB_H = 311.75; // wordmark viewBox height (for the scale factor)
 const LOGO_Y = 32;
 
 // CNG wordmark path (from card.html, fill=currentColor → Soft White here).

@@ -1,0 +1,65 @@
+{{- /*
+  og/card-blog.html — the "Masthead" Open Graph card (1200×630) for blog posts.
+  Soft White ground, Bonus Blue bar with the white wordmark + URL, a "BLOG POST"
+  eyebrow over the auto-fit ink headline, and a footer over a thin rule: author
+  (left), date (right). Static chrome is the committed assets/og/base.png.
+  Returns the og.png resource.
+*/ -}}
+{{- $page := . -}}
+{{- $m := site.Data.og_metrics -}}
+
+{{- $title := $page.Title | plainify | htmlUnescape | chomp -}}
+{{- $url := "cloudnativegeo.org/blog" -}}
+{{- $date := $page.Date.Format "02 January 2006" -}}
+{{- $author := "" -}}
+{{- with $page.Params.author -}}
+  {{- $author = . | $page.RenderString | plainify | htmlUnescape | chomp -}}
+{{- end -}}
+
+{{- $padX := 88 -}}
+{{- $usableW := 1024 -}}
+{{- $rightEdge := 1112 -}}
+{{- $hBoxTop := 156 -}}        {{- /* headline box: bar bottom → the rule (156 → 500) */ -}}
+{{- $hBoxH := 344 -}}
+{{- $footY := 518 -}}
+{{- $ink := "#2F343B" -}}
+{{- $soft := "#F2F4F6" -}}
+{{- $blue := "#2126F7" -}}
+
+{{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
+{{- $monoBold := partial "og/mono.html" "Bold" -}}
+{{- $monoReg := partial "og/mono.html" "Regular" -}}
+{{- $base := resources.Get "og/base.png" -}}
+
+{{- /* "BLOG POST" eyebrow + ink headline, centered between the bar and the rule */ -}}
+{{- $filters := partial "og/headline.html" (dict
+      "title" $title "m" $m "font" $quattro "color" $ink
+      "eyebrow" "BLOG POST" "eyeColor" $blue "eyeFont" $monoBold
+      "padX" $padX "usableW" $usableW "boxTop" $hBoxTop "boxH" $hBoxH
+      "min" 26 "max" 86 "pitch" 1.04 "eyeSize" 24 "eyeGap" 16) -}}
+
+{{- /* URL — Berkeley Mono 24, Soft White, right-aligned in the blue bar */ -}}
+{{- with $monoReg -}}
+  {{- $w := mul (mul (len $url) $m.mono.adv) 24 -}}
+  {{- $filters = $filters | append (images.Text $url (dict
+        "color" $soft "size" 24 "font" . "x" (int (sub $rightEdge $w)) "y" 44 )) -}}
+{{- end -}}
+
+{{- /* Footer over the rule: date (right), author (left, truncated to clear it) */ -}}
+{{- if $monoBold -}}
+  {{- $dateW := mul (mul (len $date) $m.mono.adv) 28 -}}
+  {{- $filters = $filters | append (images.Text $date (dict
+        "color" $ink "size" 28 "font" $monoBold "x" (int (sub $rightEdge $dateW)) "y" $footY )) -}}
+  {{- with $author -}}
+    {{- $avail := sub (sub (sub $rightEdge $padX) $dateW) 28.0 -}}
+    {{- $maxChars := int (math.Floor (div $avail (mul $m.mono.adv 28))) -}}
+    {{- $txt := . -}}
+    {{- if gt (len $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
+    {{- $filters = $filters | append (images.Text $txt (dict
+          "color" $ink "size" 28 "font" $monoBold "x" $padX "y" $footY )) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $img := $base.Filter $filters -}}
+{{- $img = resources.Copy (path.Join $page.RelPermalink "og.png") $img -}}
+{{- return $img -}}
