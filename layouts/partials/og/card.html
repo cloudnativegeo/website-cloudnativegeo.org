@@ -82,10 +82,20 @@
         "x" (int (sub $rightEdge $urlW)) "y" 44 )) -}}
 {{- end -}}
 
-{{- /* Headline — Quattro Bold, ink, left-aligned, vertically centered */ -}}
+{{- /* Eyebrow + headline — vertically centered as a group. Eyebrow is a small
+       uppercase mono label in Bonus Blue above the ink headline. */ -}}
+{{- $eyebrow := "BLOG POST" -}}
+{{- $eyeSize := 24 -}}
+{{- $eyeGap := 16 -}}
 {{- $linePitch := mul $best $pitch -}}
 {{- $blockH := mul (len $bestLines) $linePitch -}}
-{{- $blockTop := add $hBoxTop (div (sub $hBoxH $blockH) 2) -}}
+{{- $groupH := add (add $eyeSize $eyeGap) $blockH -}}
+{{- $groupTop := add $hBoxTop (div (sub $hBoxH $groupH) 2) -}}
+{{- with $monoBold -}}
+  {{- $filters = $filters | append (images.Text $eyebrow (dict
+        "color" "#2126F7" "size" $eyeSize "font" . "x" $padX "y" (int $groupTop) )) -}}
+{{- end -}}
+{{- $blockTop := add $groupTop (add $eyeSize $eyeGap) -}}
 {{- range $i, $line := $bestLines -}}
   {{- $y := int (add $blockTop (mul $i $linePitch)) -}}
   {{- $filters = $filters | append (images.Text $line (dict

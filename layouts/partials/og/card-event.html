@@ -78,12 +78,23 @@
         "color" $blue "size" 24 "font" . "x" (int (sub $rightEdge $w)) "y" 44 )) -}}
 {{- end -}}
 
-{{- /* Headline — Quattro Bold, white, left-aligned, vertically centered */ -}}
+{{- /* Eyebrow + headline — centered as a group. Eyebrow: uppercase mono in
+       Sunshine Yellow above the white headline. */ -}}
+{{- $eyebrow := "EVENT" -}}
+{{- $eyeSize := 24 -}}
+{{- $eyeGap := 16 -}}
 {{- $fit := partial "og/fit.html" (dict
       "title" $title "m" $m "usableW" $usableW "boxH" $hBoxH
       "min" $minSize "max" $maxSize "pitch" $pitch) -}}
 {{- $linePitch := mul $fit.size $pitch -}}
-{{- $blockTop := add $hBoxTop (div (sub $hBoxH (mul (len $fit.lines) $linePitch)) 2) -}}
+{{- $blockH := mul (len $fit.lines) $linePitch -}}
+{{- $groupH := add (add $eyeSize $eyeGap) $blockH -}}
+{{- $groupTop := add $hBoxTop (div (sub $hBoxH $groupH) 2) -}}
+{{- with $monoBold -}}
+  {{- $filters = $filters | append (images.Text $eyebrow (dict
+        "color" "#FFD626" "size" $eyeSize "font" . "x" $padX "y" (int $groupTop) )) -}}
+{{- end -}}
+{{- $blockTop := add $groupTop (add $eyeSize $eyeGap) -}}
 {{- range $i, $line := $fit.lines -}}
   {{- $y := int (add $blockTop (mul $i $linePitch)) -}}
   {{- $filters = $filters | append (images.Text $line (dict
