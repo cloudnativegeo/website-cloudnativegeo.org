@@ -12,9 +12,9 @@ cta_text: "Register"
 cta_url: "https://docs.google.com/forms/d/e/1FAIpQLSdOCRnAK6-_MeHK5FgWKizFcEbPMt-ZaWj8MldagWmYfVO9Pg/viewform?usp=header"
 hide_cta: false
 agenda:
-  - section: "Day 1 — Tuesday, August 25 (afternoon, internal)"
+  - section: "Day 1 — Tuesday, August 25 STAC Sprint (STAC builders)"
     items:
-      - title: "JAXA welcome, STAC standards & roles, FOSS4G context, Q&A, and evening dinner"
+      - title: "STAC Sprint style work time. A space and time for STAC practioners to develop specification and ecosystem tooling together."
   - section: "Day 2 — Wednesday, August 26 — Producer Track (open)"
     items:
       - title: "STAC core concepts, building your first STAC catalog, using STAC internally, running in production, and open lab"
