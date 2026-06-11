@@ -31,4 +31,4 @@ Each event agenda and audience will look different, fostering both local and int
 
 ## Want to Host?
 
-We're still finalizing a venue in Tokyo. If your organization has space and would like to host CNG Japan 2026, we'd love to hear from you. Please reach out to [michelle@cloudnativgeo.org](mailto:michelle@cloudnativgeo.org).
+We're still finalizing a venue in Tokyo. If your organization has space and would like to host CNG Japan 2026, we'd love to hear from you. Please reach out to [michelle@cloudnativegeo.org](mailto:michelle@cloudnativegeo.org).
