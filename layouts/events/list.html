@@ -28,7 +28,7 @@
 <h2>Upcoming Events</h2>
 <ul class="events">
     {{ $hasUpcoming := false }}
-    {{ range where .Pages "Section" "events" }}
+    {{ range sort (where .Pages "Section" "events") ".Params.event_date" "asc" }}
         {{ $eventDate := .Params.event_date | default .Date }}
         {{ if ge (time $eventDate) now }}
             {{ $hasUpcoming = true }}
@@ -43,7 +43,7 @@
 <hr>
 <h2>Past Events</h2>
 <ul class="events">
-    {{ range where .Pages "Section" "events" }}
+    {{ range sort (where .Pages "Section" "events") ".Params.event_date" "desc" }}
         {{ $eventDate := .Params.event_date | default .Date }}
         {{ if lt (time $eventDate) now }}
             {{ .Render "li" }}
