@@ -172,5 +172,11 @@
     "url": "https://planet.com",
     "id": "planet",
     "logo_size": "60%"
+  },
+  {
+    "name": "Asterisk Labs",
+    "url": "https://asterisk.coop/",
+    "id": "asterisk",
+    "logo_size": "70%"
   }
 ]
