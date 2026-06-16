@@ -32,7 +32,7 @@ For organizations:
 | Level    | Annual Fee |
 | :------- | -------: |
 | **Non-profit & educational institutions**<br> Individual memberships for up to 10 staff members, logo on website. | [$500](https://app.joinit.com/o/cng/itKZNg9pJF4qsGLXB) |
-| **Commercial enterprises and government organizations**<br> Individual memberships for up to 10 staff members, logo on website, 1 branded blog post, and ad in two newsletters. Choice of speaking opportunity at one event, joint webinar, or a booth at CNG annual in-person event. | [$5,000](https://app.joinit.com/o/cng/N9zecgu85FdaEYWTD) |
+| **Commercial enterprises and government organizations**<br> Up to 10 individual staff memberships, a logo on our website, 1 branded blog post, and 2 newsletter ads (limit 1 ad per newsletter) &ndash; plus your choice of a joint webinar or a booth at an in-person CNG event. | [$5,000](https://app.joinit.com/o/cng/N9zecgu85FdaEYWTD) |
 
 Membership fees are effectively donations to [Radiant Earth's](https://radiant.earth/) general fund. If you would like to support our work without becoming a CNG member, you can [donate to Radiant Earth](https://radiant.earth/donate/) and mention CNG in your donation comment.
 
