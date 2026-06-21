@@ -12,7 +12,7 @@
   {{ range first 2 $upcoming }}
   <div class="cta-event">
     <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-    <p class="cta-when">{{ with .Params.display_date }}{{ . | markdownify }}{{ else }}{{ $eventDate := .Params.event_date | default .Date }}{{ time $eventDate | time.Format "02 January 2006" }}{{ end }}{{ with .Params.where }} <br> {{ . }}{{ end }}</p>
+    <p class="cta-when">{{ with .Params.display_date }}{{ . | markdownify }}{{ else }}{{ $eventDate := .Params.event_date | default .Date }}{{ time $eventDate | time.Format "02 January 2006" }}{{ end }}{{ with (.Params.where_short | default .Params.where) }} <br> {{ . }}{{ end }}</p>
   </div>
   {{ end }}
 {{ else }}
