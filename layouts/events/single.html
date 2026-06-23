@@ -11,7 +11,7 @@
         {{if isset .Params "price"}}<li class="event-price"><span class="event-meta-tip">Cost:</span> {{ .Params.price | markdownify }}</li>{{ end }}
       {{ end }}
     </ul>
-    <div class="event-cta">{{if isset .Params "cta_url"}}<a href="{{ .Params.cta_url }}">{{end}}{{ .Params.cta_text }}{{if isset .Params "cta_url"}}</a>{{end}}</div>
+    {{if ne .Params.hide_cta true}}<div class="event-cta">{{if isset .Params "cta_url"}}<a href="{{ .Params.cta_url }}">{{end}}{{ .Params.cta_text }}{{if isset .Params "cta_url"}}</a>{{end}}</div>{{end}}
   </header>
   
   {{ if .Params.images }}
