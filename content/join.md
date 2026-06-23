@@ -4,31 +4,31 @@ title: "Join CNG"
 
 We are community-led and vendor-neutral. Your membership allows us to convene geospatial data practitioners from government agencies, academic institutions, international organizations, nonprofits, commercial enterprises, and startups around the world to collaborate and maximize the potential of geospatial data.
 
-### Why Join?
+## Why Join?
 Joining CNG connects you to a supportive community of data practitioners, grants access to our members-only Slack, gives you discounts on events, and provides opportunities to work on the projects that are transforming the geospatial sector.
 
-### Our Community Members
+## Our Community Members
 We're proud to work alongside leading organizations in the geospatial community:
 
 {{< member-list >}}
 
-### Why Should I Pay?
+## Why Should I Pay?
 Membership fees ensure that our members are all committed to creating a healthy community, contributing to our operational costs, subsidizing the creation of free content, and allowing us to offer scholarships to those who can't afford to pay.
 
-### Membership Levels
+## Membership Levels
 
-**For individuals**
+### For individuals
 
 | Level     | Annual Fee |
 | :-------- | -------: |
 | **Professional**<br> Open to all. | [$195](https://app.joinit.com/o/cng/JpyBZWK9WDF6Hnv3D) |
 | **Startup**<br> Open to individuals employed at companies less than 2 years old and with fewer than 3 employees. | [$99](https://app.joinit.com/o/cng/gnGGenuDptQjCuAnN) |
 | **Nonprofit**<br> Open to staff of nonprofits. | [$65](https://app.joinit.com/o/cng/scXjNc9hEvW7ih7i3) |
-| **Students and Scholarship**<br> Open to students who are currently enrolled on a full-time basis, and individuals learning via non-conventional programs such as internships, apprentices, online, and other methods. | [$20](https://app.joinit.com/o/cng/6ndETeHt3ZGkXHa6z) |
+| **Students and Scholarship**<br> Open to students who are currently enrolled on a full-time basis, and individuals learning via non-conventional programs such as internships, apprenticeships, online, and other methods. | [$20](https://app.joinit.com/o/cng/6ndETeHt3ZGkXHa6z) |
 
 If you are not able to join as a member at this time, but would like to be a part of the CNG Slack, please fill out this [waiver](https://docs.google.com/forms/d/e/1FAIpQLSefv1qZJ1cGbZ3O9plakDra1XFmg2-a6XZtORYHUVhdUxEI-Q/viewform).
 
-**For organizations**
+### For organizations
 
 | Level    | Annual Fee |
 | :------- | -------: |
