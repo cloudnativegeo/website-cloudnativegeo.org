@@ -26,6 +26,8 @@ For individuals:
 | **Nonprofit**<br> Open to staff of nonprofits. | [$65](https://app.joinit.com/o/cng/scXjNc9hEvW7ih7i3) |
 | **Students and Scholarship**<br> Open to students who are currently enrolled on a full-time basis, and individuals learning via non-conventional programs such as internships, apprentices, online, and other methods. | [$20](https://app.joinit.com/o/cng/6ndETeHt3ZGkXHa6z) |
 
+If you are not able to join as a member at this time, but would like to be a part of the CNG Slack, please fill out this [waiver](https://docs.google.com/forms/d/e/1FAIpQLSefv1qZJ1cGbZ3O9plakDra1XFmg2-a6XZtORYHUVhdUxEI-Q/viewform).
+
 For organizations:
 
 | Level    | Annual Fee |
@@ -36,5 +38,3 @@ For organizations:
 Membership fees are effectively donations to [Radiant Earth's](https://radiant.earth/) general fund. If you would like to support our work without becoming a CNG member, you can [donate to Radiant Earth](https://radiant.earth/donate/) and mention CNG in your donation comment.
 
 If you are unable to pay by credit card, please write to us at hello@cloudnativegeo.org.
-
-If you are not able to join as a member at this time, but would like to be a part of the CNG Slack, please fill out this [waiver](https://docs.google.com/forms/d/e/1FAIpQLSefv1qZJ1cGbZ3O9plakDra1XFmg2-a6XZtORYHUVhdUxEI-Q/viewform).
