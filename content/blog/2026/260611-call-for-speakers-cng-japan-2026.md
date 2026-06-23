@@ -23,7 +23,7 @@ CNG Japan is the second stop on the 2026 CNG global event series:
 
 * London | June 23
 * Tokyo | August 24
-* NYC | late September during NYC Climate Week
+* NYC | September 24 at Cooper Union
 * CNG Forum 2026 | Snowbird, UT, USA | October 6–9
 * Zürich | October 29
 
