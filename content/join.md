@@ -17,7 +17,7 @@ Membership fees ensure that our members are all committed to creating a healthy 
 
 ### Membership Levels
 
-#### For individuals
+**For individuals**
 
 | Level     | Annual Fee |
 | :-------- | -------: |
@@ -28,7 +28,7 @@ Membership fees ensure that our members are all committed to creating a healthy 
 
 If you are not able to join as a member at this time, but would like to be a part of the CNG Slack, please fill out this [waiver](https://docs.google.com/forms/d/e/1FAIpQLSefv1qZJ1cGbZ3O9plakDra1XFmg2-a6XZtORYHUVhdUxEI-Q/viewform).
 
-#### For organizations
+**For organizations**
 
 | Level    | Annual Fee |
 | :------- | -------: |
