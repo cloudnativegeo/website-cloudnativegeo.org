@@ -15,7 +15,7 @@ Talks can be given in either English or Japanese. [Submit your talk here](https:
 
 ## Colocating with STAC Sprint + FOSS4G Hiroshima
 
-Taking inspiration from the STAC community, which will also be hosting a [STAC workshop at JAXA Tsukuba](https://cloudnativegeo.org/blog/2026/06/stac-japan-2026/) (August 25–27), we wanted to host an event while we are in Japan for [FOSS4G 2026 in Hiroshima](https://foss4g.org). More importantly, we wanted to create a dedicated space for CNG practitioners to learn and share their work. Japan has a vibrant and growing cloud-native geospatial community, and this felt like the right moment to bring people together in the city before the broader conference week kicks off.
+Taking inspiration from the STAC community, which will also be hosting a [STAC workshop at JAXA Tsukuba](https://cloudnativegeo.org/blog/2026/06/announcing-stac-japan-2026/) (August 25–27), we wanted to host an event while we are in Japan for [FOSS4G 2026 in Hiroshima](https://foss4g.org). More importantly, we wanted to create a dedicated space for CNG practitioners to learn and share their work. Japan has a vibrant and growing cloud-native geospatial community, and this felt like the right moment to bring people together in the city before the broader conference week kicks off.
 
 ## Part of the 2026 CNG Series
 
@@ -23,7 +23,7 @@ CNG Japan is the second stop on the 2026 CNG global event series:
 
 * London | June 23
 * Tokyo | August 24
-* NYC | late September during NYC Climate Week
+* NYC | September 24
 * CNG Forum 2026 | Snowbird, UT, USA | October 6–9
 * Zürich | October 29
 
