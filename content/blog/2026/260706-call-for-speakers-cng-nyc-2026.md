@@ -5,7 +5,7 @@ tags: []
 summary: "Submit a talk for CNG NYC 2026, a community meetup at Cooper Union on September 24."
 ---
 
-On September 24, 2026, the Cloud-Native Geospatial Forum (CNG) is coming to New York City. CNG NYC is a community meetup at [Cooper Union](https://cooper.edu/) designed to bring the local and regional CNG community together for an afternoon of demos, conversation, and a social reception. Whether you're a practitioner, researcher, or builder, this is a chance to show off what you're working on, meet others in person, and plug into the broader global CNG network.
+On September 24, 2026, CNG is coming to NYC. CNG NYC is a community meetup at [Cooper Union](https://cooper.edu/) designed to bring the local and regional CNG community together for an afternoon of demos, conversation, and a social reception. Whether you're a practitioner, researcher, or builder, this is a chance to show off what you're working on, meet others in person, and plug into the broader global CNG network. This event is being held during New York City Climate Week. 
 
 ## Submit a Talk
 
@@ -21,8 +21,8 @@ CNG NYC is part of the 2026 CNG global event series:
 
 * London | June 23
 * Tokyo | August 24
-* **NYC | September 24 at Cooper Union**
-* CNG Forum 2026 | Snowbird, UT, USA | October 6–9
+* **NYC | September 24**
+* CNG Forum 2026 | October 6–9
 * Zürich | October 29
 
 Each event agenda and audience will look different, fostering both local and international connections.
