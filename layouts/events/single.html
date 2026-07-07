@@ -8,7 +8,7 @@
       {{ $eventDate := .Params.event_date | default .Date }}
       {{ if ge (time $eventDate) now }}
         <li class="event-where"><span class="event-meta-tip">Where:</span> {{ .Params.where | markdownify }}</li>
-        {{if isset .Params "price"}}<li class="event-price"><span class="event-meta-tip">Cost:</span> {{ .Params.price | markdownify }}</li>{{ end }}
+        {{if .Params.price}}<li class="event-price"><span class="event-meta-tip">Cost:</span> {{ .Params.price | markdownify }}</li>{{ end }}
       {{ end }}
     </ul>
     {{if ne .Params.hide_cta true}}<div class="event-cta">{{if isset .Params "cta_url"}}<a href="{{ .Params.cta_url }}">{{end}}{{ .Params.cta_text }}{{if isset .Params "cta_url"}}</a>{{end}}</div>{{end}}
