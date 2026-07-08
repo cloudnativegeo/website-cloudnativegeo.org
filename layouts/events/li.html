@@ -1,4 +1,4 @@
 <li>
-    <a href="{{ .RelPermalink }}" class="post-title">{{ .Title }}</a><br />
+    <a href="{{ with .Params.external_url }}{{ . }}{{ else }}{{ .RelPermalink }}{{ end }}" class="post-title">{{ .Title }}</a><br />
     <span class="event-date">{{ with .Params.display_date }}{{ . | markdownify }}{{ else }}{{ .Params.event_date | time.Format "02 January 2006" }}{{ end }}</span><br />
 </li>
