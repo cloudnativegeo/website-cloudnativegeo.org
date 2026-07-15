@@ -184,5 +184,17 @@
     "url": "https://www.microsoft.com",
     "id": "microsoft",
     "logo_size": "60%"
+  },
+  {
+    "name": "Geonovum",
+    "url": "https://www.geonovum.nl",
+    "id": "geonovum",
+    "logo_size": "60%"
+  },
+  {
+    "name": "OpenGeoHub Foundation",
+    "url": "https://opengeohub.org",
+    "id": "opengeohub",
+    "logo_size": "60%"
   }
 ]
