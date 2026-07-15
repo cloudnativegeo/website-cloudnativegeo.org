@@ -196,5 +196,11 @@
     "url": "https://opengeohub.org",
     "id": "opengeohub",
     "logo_size": "60%"
+  },
+  {
+    "name": "Vermont Center for Geographic Information",
+    "url": "https://vcgi.vermont.gov",
+    "id": "vcgi",
+    "logo_size": "70%"
   }
 ]
