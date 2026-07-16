@@ -12,7 +12,7 @@
       }
 
       .st2 {
-        fill: #00853f;
+        fill: #000000;
         fill-rule: evenodd;
       }
 
