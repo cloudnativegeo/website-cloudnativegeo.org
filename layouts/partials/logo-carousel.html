@@ -8,6 +8,7 @@
         {{- range $membersLarge -}}
         {{- $logoPath := printf "/img/funders/%s.svg" .id -}}
         {{- if eq .id "twente" -}}{{- $logoPath = "/img/funders/twente.png" -}}{{- end -}}
+        {{- if eq .id "opengeohub" -}}{{- $logoPath = "/img/funders/opengeohub.png" -}}{{- end -}}
         <div class="logo-carousel-item logo-carousel-item-large">
           <a href="{{ .url }}" class="logo-carousel-link"
              style="background-image: url('{{ $logoPath }}'); background-size: {{ .logo_size }};"
@@ -20,6 +21,7 @@
         {{- range $membersLarge -}}
         {{- $logoPath := printf "/img/funders/%s.svg" .id -}}
         {{- if eq .id "twente" -}}{{- $logoPath = "/img/funders/twente.png" -}}{{- end -}}
+        {{- if eq .id "opengeohub" -}}{{- $logoPath = "/img/funders/opengeohub.png" -}}{{- end -}}
         <div class="logo-carousel-item logo-carousel-item-large">
           <a href="{{ .url }}" class="logo-carousel-link"
              style="background-image: url('{{ $logoPath }}'); background-size: {{ .logo_size }};"
@@ -37,6 +39,7 @@
         {{- range $membersSmall -}}
         {{- $logoPath := printf "/img/funders/%s.svg" .id -}}
         {{- if eq .id "twente" -}}{{- $logoPath = "/img/funders/twente.png" -}}{{- end -}}
+        {{- if eq .id "opengeohub" -}}{{- $logoPath = "/img/funders/opengeohub.png" -}}{{- end -}}
         <div class="logo-carousel-item logo-carousel-item-small">
           <a href="{{ .url }}" class="logo-carousel-link"
              style="background-image: url('{{ $logoPath }}'); background-size: {{ .logo_size }};"
@@ -49,6 +52,7 @@
         {{- range $membersSmall -}}
         {{- $logoPath := printf "/img/funders/%s.svg" .id -}}
         {{- if eq .id "twente" -}}{{- $logoPath = "/img/funders/twente.png" -}}{{- end -}}
+        {{- if eq .id "opengeohub" -}}{{- $logoPath = "/img/funders/opengeohub.png" -}}{{- end -}}
         <div class="logo-carousel-item logo-carousel-item-small">
           <a href="{{ .url }}" class="logo-carousel-link"
              style="background-image: url('{{ $logoPath }}'); background-size: {{ .logo_size }};"
