@@ -1,5 +1,5 @@
 ---
-date: "2026-07-23T00:00:00-06:00"
+date: "2026-07-29T00:00:00-06:00"
 slug: announcing-geo-embedding-sprint-zurich
 title: "Announcing the Geo-Embeddings Sprint II: From Emerging Standards to Real-World Adoption"
 tags: []
