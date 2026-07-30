@@ -1,7 +1,7 @@
 ---
 date: "2026-07-29T00:00:00-06:00"
 slug: announcing-geo-embedding-sprint-zurich
-title: "Announcing the Geo-Embeddings Sprint II: From Emerging Standards to Real-World Adoption"
+title: "Announcing the Next Geo-Embeddings Sprint"
 tags: []
 summary: "IBM, CNG, Clark University, and Planet will convene a second Geo-Embeddings Sprint on October 27–28, 2026, in Zürich, Switzerland, focusing on benchmarking, fitness-for-use, and broader adoption of EO embeddings."
 author: "[Eli Simonson](https://www.linkedin.com/in/eli-simonson/) and [Michelle Roby](https://www.linkedin.com/in/the-michelle-roby/)"
