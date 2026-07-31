@@ -34,7 +34,7 @@ runtime. The build command stays `hugo --gc --minify`.
 | `layouts/partials/og/card-event.html` | Event renderer: eyebrow/headline/URL/footer onto `base-event.png` (or a duotone photo ground). | — |
 | `layouts/partials/og/card-brand.html` | Brand renderer: title/tagline/URL onto `base-brand.png`. | — |
 | `layouts/partials/og/headline.html` | Shared eyebrow + auto-fit headline, centered as a group; returns the filter slice. Used by the blog + event cards. | — |
-| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap + largest font size fitting the headline box, from the metrics. | — |
+| `layouts/partials/og/fit.html` | Shared auto-fit: greedy word-wrap (20ch measure) + largest font size fitting the headline box, from the metrics. Max size is capped ∝ 1/√(title width) so mid-length titles don't balloon to fill the box. | — |
 | `layouts/partials/og/mono.html` | Loads the Berkeley Mono TTF (CDN at build, local fallback for dev). | — |
 | `layouts/partials/opengraph.html` | Picks the card per page type and emits the og:image meta. | — |
 
@@ -52,6 +52,11 @@ Content mapping:
 | under headline | — | — | site tagline |
 | footer left | `author` | location (`where` before ` - `) | — |
 | footer right | date (`02 January 2006`) | `display_date`, with `when_time` tucked under it | the page URL |
+
+**Title budget:** aim for ≤ 70 characters; ~90 is the practical ceiling. Up to
+~85 chars renders as ≤ 4 clean lines; past 90 the block fills the box and crowds
+the footer rule (and Google/social truncate long titles anyway). `card.html`
+emits a build warning — not a failure — for titles over 90 chars.
 
 Blog and event share one footer grammar: a thin rule (dark on the light ground,
 faint white on blue) above a left/right metadata row. Footer slots auto-hide when

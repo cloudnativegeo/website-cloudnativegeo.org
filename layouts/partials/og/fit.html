@@ -1,8 +1,9 @@
 {{- /*
-  og/fit.html — reproduce the design prototype's fitHeadline() for the OG cards.
-  Greedy word-wrap + the largest font size (between .min and .max) whose wrapped
-  block fits the headline box in BOTH width and height, measured with the
-  per-glyph advances in data/og_metrics.json.
+  og/fit.html — the design prototype's fitHeadline() for the OG cards, plus a
+  length-aware size cap. Greedy word-wrap + the largest font size (between .min
+  and a max capped by total title width) whose wrapped block fits the headline
+  box in BOTH width and height, measured with the per-glyph advances in
+  data/og_metrics.json.
 
   Input (dict):
     title   — the (plain-text) headline
@@ -39,12 +40,24 @@
   {{- end -}}
 {{- end -}}
 
+{{- /* Length-aware size cap: big type only for genuinely short titles. Without
+      it the search just fills the box vertically — line count barely varies
+      with size (the wrap width scales with it), so a mid-length title wraps
+      into several short ragged lines rendered near max ("Announcing the Next
+      Geo-Embeddings Sprint" → 4 lines at 82px). Capping size ∝ 1/√(total text
+      width) keeps the type area roughly constant across title lengths. */ -}}
+{{- $totalEm := mul $space (sub (len $words) 1) -}}
+{{- range $wa := $words -}}{{- $totalEm = add $totalEm $wa.adv -}}{{- end -}}
+{{- if gt $totalEm 0.0 -}}
+  {{- $maxSize = int (math.Min $maxSize (math.Max $minSize (div 330.0 (math.Sqrt $totalEm)))) -}}
+{{- end -}}
+
 {{- $best := $minSize -}}
 {{- $bestLines := slice $title -}}
 {{- $found := false -}}
 {{- range $size := seq $maxSize -1 $minSize -}}
   {{- if not $found -}}
-    {{- $usable := math.Min $usableW (mul (mul $ch $size) 17) -}}
+    {{- $usable := math.Min $usableW (mul (mul $ch $size) 20) -}}
     {{- $lines := slice -}}
     {{- $cur := "" -}}
     {{- $curEm := 0.0 -}}
