@@ -13,7 +13,7 @@
 {{- $img := "" -}}
 {{- /* Title budget: cards look best ≤ ~70 chars and degrade past ~90 (see
       scripts/og/README.md). Warn — don't fail — so long titles get fixed. */ -}}
-{{- $tlen := len ($page.Title | plainify) -}}
+{{- $tlen := strings.RuneCount ($page.Title | plainify) -}}
 {{- if gt $tlen 90 -}}
   {{- warnf "OG card: %q title is %d chars; cards get cramped past ~90 (aim for ≤70): %s" $page.RelPermalink $tlen $page.Title -}}
 {{- end -}}

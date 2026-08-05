@@ -47,14 +47,14 @@
 
 {{- /* Footer over the rule: date (right), author (left, truncated to clear it) */ -}}
 {{- if $monoBold -}}
-  {{- $dateW := mul (mul (len $date) $m.mono.adv) 28 -}}
+  {{- $dateW := mul (mul (strings.RuneCount $date) $m.mono.adv) 28 -}}
   {{- $filters = $filters | append (images.Text $date (dict
         "color" $ink "size" 28 "font" $monoBold "x" (int (sub $rightEdge $dateW)) "y" $footY )) -}}
   {{- with $author -}}
     {{- $avail := sub (sub (sub $rightEdge $padX) $dateW) 28.0 -}}
     {{- $maxChars := int (math.Floor (div $avail (mul $m.mono.adv 28))) -}}
     {{- $txt := . -}}
-    {{- if gt (len $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
+    {{- if gt (strings.RuneCount $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
     {{- $filters = $filters | append (images.Text $txt (dict
           "color" $ink "size" 28 "font" $monoBold "x" $padX "y" $footY )) -}}
   {{- end -}}

@@ -54,7 +54,7 @@
   {{- $cur := "" -}}
   {{- range $w := split $tagline " " -}}
     {{- $t := cond (eq $cur "") $w (printf "%s %s" $cur $w) -}}
-    {{- if le (len $t) $maxChars -}}{{- $cur = $t -}}
+    {{- if le (strings.RuneCount $t) $maxChars -}}{{- $cur = $t -}}
     {{- else -}}{{- $tagLines = $tagLines | append $cur -}}{{- $cur = $w -}}{{- end -}}
   {{- end -}}
   {{- if ne $cur "" -}}{{- $tagLines = $tagLines | append $cur -}}{{- end -}}

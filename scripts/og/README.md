@@ -9,8 +9,8 @@ Every page on cloudnativegeo.org gets a generated 1200×630 Open Graph card — 
 - **Single event pages → Event**: the photo-negative — Bonus Blue ground, Soft
   White bar with a blue wordmark + the events URL, an `EVENT` eyebrow (Sunshine
   Yellow) over a centered white headline, and a footer over a thin rule with the
-  same grammar as the blog card: location (left), date with the time tucked under
-  it (right). Flagship events can use a duotone photo ground.
+  same grammar as the blog card: location (left), date (right). Flagship events
+  can use a duotone photo ground.
 - **Home, section landings (/blog, /events), and all generic pages → Brand**:
   full-bleed Bonus Blue, **no bar** — a larger white wordmark sits directly on the
   blue, with the white title + tagline centered, a faint rule, and the page URL
@@ -51,7 +51,7 @@ Content mapping:
 | headline | `.Title` (ink) | `.Title` (white) | `.Title` (white, " - CNG" stripped) |
 | under headline | — | — | site tagline |
 | footer left | `author` | location (`where` before ` - `) | — |
-| footer right | date (`02 January 2006`) | `display_date`, with `when_time` tucked under it | the page URL |
+| footer right | date (`02 January 2006`) | `display_date` | the page URL |
 
 **Title budget:** aim for ≤ 70 characters; ~90 is the practical ceiling. Up to
 ~85 chars renders as ≤ 4 clean lines; past 90 the block fills the box and crowds

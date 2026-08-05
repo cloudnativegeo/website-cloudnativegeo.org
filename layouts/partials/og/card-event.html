@@ -3,8 +3,8 @@
   photo-negative of the Masthead card, and structurally consistent with it.
   Bonus Blue ground, Soft White top bar with a blue wordmark (left) + the events
   URL (right), a white auto-fit headline centered between the bar and the rule, and
-  a white footer over a thin rule: the location (left) and the date with the time
-  tucked under it (right) — the same left/right metadata grammar as the blog card.
+  a white footer over a thin rule: the location (left) and the date (right) — the
+  same left/right metadata grammar as the blog card.
 
   Static chrome (blue ground, white bar, blue wordmark, footer rule) is the
   committed assets/og/base-event.png. Flagship events may set front-matter
@@ -20,7 +20,6 @@
 {{- $title := $page.Title | plainify | htmlUnescape | chomp -}}
 {{- $url := "cloudnativegeo.org/events" -}}
 {{- $date := $page.Params.display_date | default "" -}}
-{{- $time := $page.Params.when_time | default "" -}}
 
 {{- /* location = the part of `where` before the street address; keep "Virtual" etc. */ -}}
 {{- $loc := "" -}}
@@ -36,11 +35,8 @@
 {{- $hBoxH := 344 -}}
 {{- $footY := 518 -}}          {{- /* location + date baseline */ -}}
 {{- $footSize := 28 -}}
-{{- $timeY := 548 -}}          {{- /* time, tucked under the date */ -}}
-{{- $timeSize := 20 -}}
 {{- $white := "#F2F4F6" -}}
 {{- $blue := "#2126F7" -}}
-{{- $dim := "#B7BBF6" -}}      {{- /* ~72% white over Bonus Blue, for the time */ -}}
 
 {{- $quattro := resources.Get "/fonts/iAWriterQuattroS-Bold.ttf" -}}
 {{- $monoBold := partial "og/mono.html" "Bold" -}}
@@ -79,28 +75,22 @@
         "color" $blue "size" 24 "font" . "x" (int (sub $rightEdge $w)) "y" 44 )) -}}
 {{- end -}}
 
-{{- /* Footer (mirrors the blog card): location bottom-left; date bottom-right with
-       the time tucked under it. Location truncates so it never hits the date. */ -}}
+{{- /* Footer (mirrors the blog card): location bottom-left, date bottom-right.
+       Location truncates so it never hits the date. Widths count RUNES, not
+       bytes — an en dash or "Zürich" would otherwise skew the alignment. */ -}}
 {{- if $monoBold -}}
-  {{- $dateW := mul (mul (len $date) $m.mono.adv) $footSize -}}
-  {{- $timeW := mul (mul (len $time) $m.mono.adv) $timeSize -}}
+  {{- $dateW := mul (mul (strings.RuneCount $date) $m.mono.adv) $footSize -}}
   {{- with $date -}}
     {{- $filters = $filters | append (images.Text . (dict
           "color" $white "size" $footSize "font" $monoBold
           "x" (int (sub $rightEdge $dateW)) "y" $footY )) -}}
   {{- end -}}
-  {{- with $time -}}
-    {{- $filters = $filters | append (images.Text . (dict
-          "color" $dim "size" $timeSize "font" $monoReg
-          "x" (int (sub $rightEdge $timeW)) "y" $timeY )) -}}
-  {{- end -}}
   {{- with $loc -}}
     {{- $charW := mul $m.mono.adv $footSize -}}
-    {{- $rightW := math.Max $dateW $timeW -}}
-    {{- $avail := sub (sub (sub $rightEdge $padX) $rightW) 28.0 -}}
+    {{- $avail := sub (sub (sub $rightEdge $padX) $dateW) 28.0 -}}
     {{- $maxChars := int (math.Floor (div $avail $charW)) -}}
     {{- $txt := . -}}
-    {{- if gt (len $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
+    {{- if gt (strings.RuneCount $txt) $maxChars -}}{{- $txt = printf "%s…" (substr $txt 0 (sub $maxChars 1)) -}}{{- end -}}
     {{- $filters = $filters | append (images.Text $txt (dict
           "color" $white "size" $footSize "font" $monoBold "x" $padX "y" $footY )) -}}
   {{- end -}}
