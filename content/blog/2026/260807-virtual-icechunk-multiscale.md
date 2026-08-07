@@ -85,10 +85,11 @@ levels. The Zarr community has recently converged on a standardized way of
 representing these coarsened versions of high resolution spatial data:
 [the multiscale spec](https://github.com/zarr-conventions/multiscales).
 
-To streamline the multiscale creation process we released [`topozarr`](https://carbonplan.github.io/topozarr/), a library
-for adding multiscales and associated metadata to Zarr and Icechunk stores. We
-can use this to create a “hybrid” store where the full resolution data is stored
-as references to the original analysis data, with relatively lightweight
+To streamline the multiscale creation process we released
+[`topozarr`](https://carbonplan.github.io/topozarr/), a library for adding
+multiscales and associated metadata to Zarr and Icechunk stores. We can use this
+to create a “hybrid” store where the full resolution data is stored as
+references to the original analysis data, with relatively lightweight
 multiscales added on. This one-time operation is cheap compared to full tileset
 generation because no reprojection, regridding, or duplication of the data is
 required.
@@ -337,10 +338,12 @@ NetCDF on S3 for this demo.
 
 This work is exploratory, and there are many underlying data formats we haven’t
 tested out yet. All of the pieces are open source and we’d love to see what you
-build. Please open issues on [GitHub](https://github.com/carbonplan), reach out
-to us at hello@carbonplan.org, or find us in the CNG Slack. Thanks to the
-Earthmover and Development Seed teams for much of the tooling and conceptual
-work that underlies this workflow.
+build. The maps above are a single self-contained HTML file, which you can read
+or fork at [icechunk-maps](https://github.com/carbonplan/icechunk-maps). Please
+open issues on [GitHub](https://github.com/carbonplan), reach out to us at
+hello@carbonplan.org, or find us in the CNG Slack. Thanks to the Earthmover and
+Development Seed teams for much of the tooling and conceptual work that
+underlies this workflow.
 
 <style>
   #store-diagram {
