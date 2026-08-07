@@ -1,6 +1,6 @@
 ---
 title: "Hybrid Icechunk stores for serverless web mapping"
-date: 2026-06-16T00:00:00-04:00
+date: 2026-08-07T00:00:00-04:00
 slug: virtual-icechunk-multiscale
 summary:
   "Render analysis data directly in web maps by creating ‘hybrid’ icechunk
@@ -55,9 +55,11 @@ requiring an intermediary tile server.
 This approach works great if you have full control over your data and can store
 it as Zarr, but there are petabytes of gridded climate and weather data that are
 stored in archival file formats such as NetCDF/HDF5, GRIB, TIFF, and others.
-Fortunately, tools like VirtualiZarr let you read these archival data formats
-_as if they were Zarr_. These virtual Zarr references are stored in the Icechunk
-format and don’t duplicate the data, but instead point to byte ranges inside the
+Fortunately, tools like
+[VirtualiZarr](https://virtualizarr.readthedocs.io/en/stable/index.html) let you
+read these archival data formats _as if they were Zarr_. These virtual Zarr
+references are stored in the [Icechunk](https://icechunk.io/en/stable/) format
+and don’t duplicate the data, but instead point to byte ranges inside the
 original files.
 
 To access these stores in a browser, we built
@@ -83,7 +85,7 @@ levels. The Zarr community has recently converged on a standardized way of
 representing these coarsened versions of high resolution spatial data:
 [the multiscale spec](https://github.com/zarr-conventions/multiscales).
 
-To streamline the multiscale creation process we released `topozarr`, a library
+To streamline the multiscale creation process we released [`topozarr`](https://carbonplan.github.io/topozarr/), a library
 for adding multiscales and associated metadata to Zarr and Icechunk stores. We
 can use this to create a “hybrid” store where the full resolution data is stored
 as references to the original analysis data, with relatively lightweight
