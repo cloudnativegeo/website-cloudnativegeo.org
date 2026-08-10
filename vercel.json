@@ -25,7 +25,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'sha256-rvUWS8zGmC0c2vKuAGoAP2TqFN1otgF1shOTMrJr+sE=' https://cdn.vercel-insights.com https://*.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://assets.radiant.earth; connect-src 'self' https://cdn.vercel-insights.com https://*.vercel-insights.com https://vitals.vercel-insights.com; frame-src 'none'; frame-ancestors *; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; object-src 'none'"
+          "value": "default-src 'self'; script-src 'self' 'sha256-rvUWS8zGmC0c2vKuAGoAP2TqFN1otgF1shOTMrJr+sE=' https://cdn.vercel-insights.com https://*.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://assets.radiant.earth; connect-src 'self' https://cdn.vercel-insights.com https://*.vercel-insights.com https://vitals.vercel-insights.com; frame-src https://icechunk-maps.vercel.app; frame-ancestors *; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; object-src 'none'"
         }
       ]
     },
