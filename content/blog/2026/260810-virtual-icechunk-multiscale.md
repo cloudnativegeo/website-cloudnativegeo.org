@@ -1,6 +1,6 @@
 ---
 title: "Hybrid Icechunk stores for serverless web mapping"
-date: 2026-08-07T00:00:00-04:00
+date: 2026-08-10T00:00:00-04:00
 slug: virtual-icechunk-multiscale
 summary:
   "Render analysis data directly in web maps by creating ‘hybrid’ icechunk
