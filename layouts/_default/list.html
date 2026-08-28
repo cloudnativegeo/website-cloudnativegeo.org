@@ -46,15 +46,19 @@
 		{{- end -}}
 	{{- end -}}
 
+	{{- /* The current year is not an archive: its posts are covered by the main
+	     blog page, so exclude it from both archive link lists below. */ -}}
+	{{- $thisYear := now.Format "2006" -}}
+
 	{{- if not $isYearArchive -}}
-		{{- /* Show archive links for years with posts (main blog page only) */ -}}
-		{{- /* Collect all years that have posts by examining File.Dir */ -}}
+		{{- /* Show archive links for past years with posts (main blog page only) */ -}}
+		{{- /* Collect all past years that have posts by examining File.Dir */ -}}
 		{{- $allYears := slice -}}
 		{{- range where .Site.RegularPages "Section" "blog" -}}
 			{{- if .File.Dir -}}
 				{{- if ne .File.Dir "blog/" -}}
 					{{- $year := .File.Dir | replaceRE "blog/([0-9]+)/" "$1" -}}
-					{{- if not (in $allYears $year) -}}
+					{{- if and (ne $year $thisYear) (not (in $allYears $year)) -}}
 						{{- $allYears = $allYears | append $year -}}
 					{{- end -}}
 				{{- end -}}
@@ -82,7 +86,7 @@
 			{{- if .File.Dir -}}
 				{{- if ne .File.Dir "blog/" -}}
 					{{- $year := .File.Dir | replaceRE "blog/([0-9]+)/" "$1" -}}
-					{{- if and (ne $year $currentYear) (not (in $otherYears $year)) -}}
+					{{- if and (ne $year $currentYear) (ne $year $thisYear) (not (in $otherYears $year)) -}}
 						{{- $otherYears = $otherYears | append $year -}}
 					{{- end -}}
 				{{- end -}}
