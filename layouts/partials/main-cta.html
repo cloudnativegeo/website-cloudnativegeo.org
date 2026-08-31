@@ -11,7 +11,7 @@
   <span class="cta-head">Upcoming CNG Events</span>
   {{ range first 2 $upcoming }}
   <div class="cta-event">
-    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <h3><a href="{{ if .Params.external_url }}{{ .Params.external_url }}{{ else }}{{ .RelPermalink }}{{ end }}">{{ .Title }}</a></h3>
     <p class="cta-when">{{ with .Params.display_date }}{{ . | markdownify }}{{ else }}{{ $eventDate := .Params.event_date | default .Date }}{{ time $eventDate | time.Format "02 January 2006" }}{{ end }}{{ with (.Params.where_short | default .Params.where) }} <br> {{ . }}{{ end }}</p>
   </div>
   {{ end }}
