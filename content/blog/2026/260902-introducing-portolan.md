@@ -191,7 +191,7 @@ heads of domain experts.
     <source src="/videos/20260902-portolan-demo-two.mp4" type="video/mp4">
     A terminal recording shows an agent search the Portolan registry for Moldova flood data, inspect related catalogs, estimate exposed buildings and population, and rank planning corridors.
   </video>
-  <figcaption><p>Figure 4. An agent answers a flood-risk question in Moldova using catalogs found through the Portolan registry.</p></figcaption>
+  <figcaption><p>Figure 4. An agent answers questions about flood risk in Moldova using catalogs in the Portolan registry.</p></figcaption>
 </figure>
 
 This also reduces the expertise required simply to get at the data. Users
@@ -219,8 +219,12 @@ data from other publishers. The underlying bytes never leave the publisher's
 storage; users continue to query them directly from the source. Even if the
 registry disappeared tomorrow, every registered catalog would keep working.
 
-The network has already started to take shape, with catalogs spanning global
-datasets, national government data, and community mirrors. As it grows,
+The network has already started to take shape, with catalogs spanning
+[global datasets](https://browser.portolan-sdi.org/#/external/data.source.coop/ftw/global-data/catalog.json),
+[national government data](https://browser.portolan-sdi.org/#/external/data.source.coop/cholmes/portolan-nl/catalog.json),
+and
+[community mirrors](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/ghsl/catalog.json).
+As it grows,
 discovery starts to work very differently. A person or agent can begin with
 nothing more than the URL of the registry, find relevant datasets across many
 publishers, understand how they're structured, and query them directly from the
