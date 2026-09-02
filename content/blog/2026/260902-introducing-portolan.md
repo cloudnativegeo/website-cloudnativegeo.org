@@ -1,5 +1,5 @@
 ---
-date: "2026-09-02T10:00:00-04:00"
+date: "2026-09-02T10:00:00+02:00"
 slug: introducing-portolan
 title: "Introducing Portolan: A serverless spatial data infrastructure"
 tags: []
