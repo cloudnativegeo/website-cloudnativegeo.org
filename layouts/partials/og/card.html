@@ -11,12 +11,6 @@
 */ -}}
 {{- $page := . -}}
 {{- $img := "" -}}
-{{- /* Title budget: cards look best ≤ ~70 chars and degrade past ~90 (see
-      scripts/og/README.md). Warn — don't fail — so long titles get fixed. */ -}}
-{{- $tlen := strings.RuneCount ($page.Title | plainify) -}}
-{{- if gt $tlen 90 -}}
-  {{- warnf "OG card: %q title is %d chars; cards get cramped past ~90 (aim for ≤70): %s" $page.RelPermalink $tlen $page.Title -}}
-{{- end -}}
 {{- if and $page.IsPage (eq $page.Section "events") -}}
   {{- $img = partial "og/card-event.html" $page -}}
 {{- else if and $page.IsPage (eq $page.Section "blog") -}}

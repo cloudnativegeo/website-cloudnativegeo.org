@@ -55,8 +55,8 @@ Content mapping:
 
 **Title budget:** aim for ≤ 70 characters; ~90 is the practical ceiling. Up to
 ~85 chars renders as ≤ 4 clean lines; past 90 the block fills the box and crowds
-the footer rule (and Google/social truncate long titles anyway). `card.html`
-emits a build warning — not a failure — for titles over 90 chars.
+the footer rule (and Google/social truncate long titles anyway). This is
+guidance only — the build no longer warns about long titles.
 
 Blog and event share one footer grammar: a thin rule (dark on the light ground,
 faint white on blue) above a left/right metadata row. Footer slots auto-hide when
