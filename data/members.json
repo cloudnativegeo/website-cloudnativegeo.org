@@ -202,5 +202,11 @@
     "url": "https://vcgi.vermont.gov",
     "id": "vcgi",
     "logo_size": "70%"
+  },
+  {
+    "name": "Dewberry",
+    "url": "https://www.dewberry.com",
+    "id": "dewberry",
+    "logo_size": "80%"
   }
 ]
