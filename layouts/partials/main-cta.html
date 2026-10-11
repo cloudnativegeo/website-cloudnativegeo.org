@@ -16,9 +16,10 @@
   </div>
   {{ end }}
 {{ else }}
-  {{ range first 1 (where site.RegularPages "Section" "ctas") }}
+  {{/* No upcoming events: always fall back to the Join CNG call to action. */}}
+  {{ with site.GetPage "/ctas/join-cng" }}
   <span class="cta-head">{{ .Params.cta_head }}</span>
-  <h3>{{if isset .Params "title_url"}}<a href="{{ .Params.title_url }}">{{end}}{{ .Title }}{{if isset .Params "title_url"}}</a>{{end}}</h3>
+  {{ if .Title }}<h3>{{if isset .Params "title_url"}}<a href="{{ .Params.title_url }}">{{end}}{{ .Title }}{{if isset .Params "title_url"}}</a>{{end}}</h3>{{ end }}
   {{if isset .Params "when"}}<p class="cta-when">{{ .Params.when }}</p>{{end}}
   <div class="main-cta-url">{{if isset .Params "cta_url"}}<a href="{{ .Params.cta_url }}">{{end}}{{ .Params.cta_text }}{{if isset .Params "cta_url"}}</a>{{end}}</div>
   {{ end }}
