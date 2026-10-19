@@ -125,6 +125,11 @@
       "source": "/nyc26",
       "destination": "/events/cng-nyc/",
       "permanent": false
+    },
+    {
+      "source": "/zurich26",
+      "destination": "/events/cng-zurich/",
+      "permanent": false
     }
   ]
 }
