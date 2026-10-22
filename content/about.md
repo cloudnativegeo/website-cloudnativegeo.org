@@ -15,7 +15,7 @@ By making geospatial data easier to access and use, we seek to create a world wh
 
 ## What we do
 - **We organize events** for our community, including development sprints, webinars, and conferences. If you want to organize an event with us, please write to hello@cloudnativegeo.org.
-- **We maintain online spaces and communication channels** to enable collaboration and share updates from our community. Connect with the CNG community through the [CNG Blog](/blog), the [CNG Newsletter](/https://share.hsforms.com/1SE7MCWS7RrSsAV3HN2C7TArzpx6), [LinkedIn](https://www.linkedin.com/company/cloudnativegeo/), and our members-only Slack.
+- **We maintain online spaces and communication channels** to enable collaboration and share updates from our community. Connect with the CNG community through the [CNG Blog](/blog), the [CNG Newsletter](https://cng.kit.com), [LinkedIn](https://www.linkedin.com/company/cloudnativegeo/), and our members-only Slack.
 - **We provide fiscal sponosrship** through our parent organization, [Radiant Earth](https://radiant.earth). If you're interested in having Radiant Earth serve as a fiscal sponsor for a project to make data easier to access and use, please write to hello@radiant.earth.
 
 ## What we don't do
