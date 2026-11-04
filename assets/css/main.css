@@ -605,6 +605,14 @@ div.main-cta-url {
   margin: 1em 0 0 0;
 }
 
+/* The button is an inline <a>; make it inline-block so its own padding and
+   border count toward the box height instead of hanging below the line and
+   eating into the container's bottom padding. */
+div.main-cta-url a {
+  display: inline-block;
+  margin: 0;
+}
+
 div.cta-event + div.cta-event {
   margin-top: 0.75em;
 }
@@ -1146,7 +1154,7 @@ a#yale-geospatial { background-image: url("/img/funders/yale-geospatial.svg"); b
   div.main-cta {
     width: 30%;
     margin-left: 5%;
-    padding: .5em 1em .5em 1em;
+    padding: .5em 1em 1em 1em;
     float: right;
     border-top: none;
     border-left: 2px var(--color-accent) solid;
