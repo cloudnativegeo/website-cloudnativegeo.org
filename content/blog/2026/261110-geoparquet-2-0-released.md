@@ -4,7 +4,7 @@ slug: geoparquet-2-0-released
 title: "GeoParquet 2.0 Released"
 tags: []
 summary: "GeoParquet 2.0 re-centers the specification on the native Parquet GEOMETRY and GEOGRAPHY types, aligning the geospatial world with mainstream Parquet tooling."
-author: "[Chris Holmes](https://www.linkedin.com/in/opencholmes/) and [Dewey Dunnington](https://github.com/paleolimbot)"
+author: "[Chris Holmes](https://9eo.org) and [Dewey Dunnington](https://github.com/paleolimbot)"
 ---
 
 We are pleased to announce the [release of GeoParquet 2.0](https://github.com/opengeospatial/geoparquet/releases/tag/v2.0.0)! The clearest explanation is in the release notes:
