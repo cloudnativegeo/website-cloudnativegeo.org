@@ -64,9 +64,9 @@ A few gaps are worth knowing about. GDAL can write native geospatial types from 
 
 For most people, we think the answer is yes — give it a go.
 
-If your data is read by DuckDB, SedonaDB, Spark, GeoPandas, QGIS, or anything sitting on modern Arrow, GeoParquet 2.0 gets you smaller files with no `bbox` column, spatial filtering for free from row group statistics, and a geometry column that non-geospatial tooling can recognize as geospatial. That last one is what we're really after. Geospatial stops being something you bolt on and becomes something your database already understands, and that only happens once there are 2.0 files out there to read.
+If your data is read by DuckDB, SedonaDB, Spark, GeoPandas, QGIS, or anything sitting on modern Arrow, GeoParquet 2.0 gets you smaller files with no `bbox` column, spatial filtering for free from row group statistics, and a geometry column that non-geospatial tooling can recognize as geospatial. That last point is the key one, as geospatial stops being something you bolt on and becomes something your database already understands, and that only happens once there are 2.0 files out there to read.
 
-The case for staying on 1.1 is reach. If you are publishing to the widest possible audience, and can't assume much about what will open your file, 1.1 with a `bbox` covering column is still the safer bet. It's what the large public datasets do today, Overture Maps included, and all readers will continue to read it for many years.
+The reason to stay on 1.1 is to be sure older tooling still works. If you are publishing to the widest possible audience, and can't assume much about what will open your file, 1.1 with a `bbox` covering column is still the safer bet today. It's what the large public datasets do, Overture Maps included, and all readers will continue to read it for many years.
 
 ## Thanks, and how to help
 
