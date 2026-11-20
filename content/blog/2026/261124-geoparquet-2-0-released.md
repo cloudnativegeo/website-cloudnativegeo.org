@@ -68,8 +68,6 @@ If your data is read by DuckDB, SedonaDB, Spark, GeoPandas, QGIS, or anything si
 
 The case for staying on 1.1 is reach. If you are publishing to the widest possible audience, and can't assume much about what will open your file, 1.1 with a `bbox` covering column is still the safer bet. It's what the large public datasets do today, Overture Maps included, and a well-written 1.1 file isn't a mistake you'll have to apologize for later.
 
-Whichever version you choose, the same things make a file fast. Use zstd compression, order the data spatially, and pick sensible row group sizes. Those matter more than the version number does.
-
 ## Thanks, and how to help
 
 GeoParquet 2.0 is the work of a lot of people across a lot of organizations, and most of it happened somewhere other than the GeoParquet repo. Getting GEOMETRY and GEOGRAPHY into Parquet itself took years of patient work in the Apache Parquet community, and the implementers who shipped those types in Arrow, GDAL, DuckDB, Sedona and elsewhere are the reason a 2.0 file is useful on the day the spec ships rather than a year later. Thank you to everyone who wrote a PR, filed an issue, argued about CRS strings, or just tried the release candidates and told us what broke.
