@@ -54,6 +54,7 @@ The Parquet geospatial types landed in Arrow C++ and pyarrow in 21.0.0, back in 
 * **GeoPandas** since 1.2.0
 * **Apache Spark** since 4.2, and Databricks Runtime 18 on Spark 4.1
 * **SedonaDB** since 0.4.0
+* **hyparquet** since 1.19, decoding native geometry columns straight to GeoJSON in JavaScript
 * **QGIS** since 4.2, through its bundled GDAL — it opens a native-typed file even when there is no `geo` metadata in it at all
 
 Plenty of tools can write 2.0 output as well, though none of them do it by default yet — reasonably enough, since the spec has only just landed. In DuckDB you ask for it with `COPY ... TO 'out.parquet' (FORMAT parquet, GEOPARQUET_VERSION 'V2')`; in GeoPandas with `to_parquet(..., schema_version="2.0.0")`. SedonaDB and [geoparquet-io](https://github.com/geoparquet/geoparquet-io) will write 2.0 too, and SedonaDB is currently one of the few things that writes the `GEOGRAPHY` type at all. Expect the defaults to move as the readers become ubiquitous.
