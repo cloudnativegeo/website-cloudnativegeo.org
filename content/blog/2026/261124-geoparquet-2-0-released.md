@@ -46,9 +46,7 @@ There have also been some nice advances in the ecosystem around making 2.0 easy 
 
 ## Where tool support stands
 
-The nice thing about building on a core Parquet feature is that a lot of the work happened without us. The Parquet geospatial types landed in Arrow C++ and pyarrow in 21.0.0, which means a surprising number of tools gained the ability to round-trip a typed geometry column without anyone setting out to support GeoParquet at all.
-
-Reading is in good shape. Shipped releases that understand native `GEOMETRY` and `GEOGRAPHY` columns today include:
+The Parquet geospatial types landed in Arrow C++ and pyarrow in 21.0.0, back in July 2025, which means a number of tools have gained the ability to round-trip a typed geometry column. Reading is in good shape. Shipped releases that understand native `GEOMETRY` and `GEOGRAPHY` columns today include:
 
 * **GDAL/OGR** since 3.12 (with libarrow 21 or newer)
 * **DuckDB** since 1.5, where `GEOMETRY` moved into core
@@ -58,9 +56,9 @@ Reading is in good shape. Shipped releases that understand native `GEOMETRY` and
 * **SedonaDB** since 0.4.0
 * **QGIS** since 4.2, through its bundled GDAL — it opens a native-typed file even when there is no `geo` metadata in it at all
 
-Writing is further behind. **Every one of these tools still defaults to GeoParquet 1.0 or 1.1.** You have to ask for 2.0. In DuckDB that means `COPY ... TO 'out.parquet' (FORMAT parquet, GEOPARQUET_VERSION 'V2')`; in GeoPandas it means `to_parquet(..., schema_version="2.0.0")`. SedonaDB and [geoparquet-io](https://github.com/geoparquet/geoparquet-io) will write 2.0 as well, and SedonaDB is currently one of the few things that writes the `GEOGRAPHY` type at all.
+Plenty of tools can write 2.0 output as well, though none of them do it by default yet — reasonably enough, since the spec has only just landed. In DuckDB you ask for it with `COPY ... TO 'out.parquet' (FORMAT parquet, GEOPARQUET_VERSION 'V2')`; in GeoPandas with `to_parquet(..., schema_version="2.0.0")`. SedonaDB and [geoparquet-io](https://github.com/geoparquet/geoparquet-io) will write 2.0 too, and SedonaDB is currently one of the few things that writes the `GEOGRAPHY` type at all. Expect the defaults to move as the readers become ubiquitous.
 
-A couple of notable gaps are closing shortly. GDAL can write native geospatial types from 3.12 with the `USE_PARQUET_GEO_TYPES=YES` layer creation option, but full GeoParquet 2.0 support arrives in 3.14, which hasn't been released yet. Apache Sedona merged its GeoParquet 2.0 reader and writer in November, targeted at the 2.0.0 release — so it's in the repo but not yet in a release you can install. `GEOGRAPHY` support in general lags `GEOMETRY` across the board; DuckDB, for instance, has no `GEOGRAPHY` type in core today.
+A few gaps are worth knowing about. GDAL can write native geospatial types from 3.12 with the `USE_PARQUET_GEO_TYPES=YES` layer creation option, but full GeoParquet 2.0 support arrives in 3.14, which hasn't been released yet. Apache Sedona merged its GeoParquet 2.0 reader and writer in November, targeted at the 2.0.0 release, so it's in the repo but not yet in a release you can install. GeoPandas 1.2 reads and writes 2.0, but only by way of the `geo` metadata — hand it a file carrying nothing but native Parquet types and it will tell you the geo metadata is missing, where GDAL and DuckDB read that file fine. And `GEOGRAPHY` lags `GEOMETRY` across the board; DuckDB, for instance, has no `GEOGRAPHY` type in core today.
 
 ## Should you switch?
 
