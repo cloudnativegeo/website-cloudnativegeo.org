@@ -70,14 +70,8 @@ The case for staying on 1.1 is reach. If you are publishing to the widest possib
 
 Whichever version you choose, the same things make a file fast. Use zstd compression, order the data spatially, and pick sensible row group sizes. Those matter more than the version number does.
 
-## Thank you, and come help
+## Thanks, and how to help
 
 GeoParquet 2.0 is the work of a lot of people across a lot of organizations, and most of it happened somewhere other than the GeoParquet repo. Getting GEOMETRY and GEOGRAPHY into Parquet itself took years of patient work in the Apache Parquet community, and the implementers who shipped those types in Arrow, GDAL, DuckDB, Sedona and elsewhere are the reason a 2.0 file is useful on the day the spec ships rather than a year later. Thank you to everyone who wrote a PR, filed an issue, argued about CRS strings, or just tried the release candidates and told us what broke.
 
-There is plenty left to do, and it is all in the open:
-
-* The spec, issues and discussions live in the [GeoParquet GitHub repo](https://github.com/opengeospatial/geoparquet).
-* Page-level spatial statistics are the clearest remaining performance gap — [issue #279](https://github.com/opengeospatial/geoparquet/issues/279) has the benchmarks and is where to weigh in.
-* We run biweekly calls on advancing geospatial in Parquet, Iceberg and Arrow. Join the [geoparquet-community group](https://groups.google.com/a/cloudnativegeo.org/g/geoparquet-community) and you'll be added to the calendar.
-
-And if you publish data, the most useful thing you can do is publish some GeoParquet 2.0 and tell us how it went.
+If you want to help, the most useful thing you can do is publish some GeoParquet 2.0 and tell us how it went. Every file out in the world gives implementers something real to test against, gives the tools a reason to move their defaults, and shows us where the spec is still vague. If you hit something that doesn't work, or want a hand in what comes next, the [GeoParquet repo](https://github.com/opengeospatial/geoparquet) is where the spec and the arguments live, and the [geoparquet-community group](https://groups.google.com/a/cloudnativegeo.org/g/geoparquet-community) will get you on the calendar for our biweekly calls on geospatial in Parquet, Iceberg and Arrow.
