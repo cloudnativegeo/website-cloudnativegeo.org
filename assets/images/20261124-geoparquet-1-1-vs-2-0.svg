@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="880" viewBox="0 0 1600 880" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <style>
+      .ttl   { font-size: 34px; font-weight: bold; fill: #1D232B; }
+      .sub   { font-size: 21px; fill: #566; }
+      .col   { font-size: 24px; font-weight: bold; fill: #1D232B; }
+      .colt  { font-size: 20px; fill: #2126F7; font-family: "Courier New", monospace; font-weight: bold; }
+      .note  { font-size: 19px; fill: #4a5560; }
+      .tag   { font-size: 17px; font-weight: bold; fill: #1D232B; letter-spacing: 1.2px; }
+      .foot  { font-size: 19px; fill: #4a5560; }
+      .kick  { font-size: 18px; font-weight: bold; fill: #ffffff; letter-spacing: 1.4px; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="880" fill="#F2F4F6"/>
+
+  <!-- ============ LEFT: GeoParquet 1.1 ============ -->
+  <g transform="translate(60,46)">
+    <rect x="0" y="0" width="680" height="790" rx="14" fill="#ffffff" stroke="#d0d6dd" stroke-width="2"/>
+
+    <text class="ttl" x="36" y="62">GeoParquet 1.1</text>
+    <text class="sub" x="36" y="96">Geospatial layered on top of plain Parquet</text>
+    <line x1="36" y1="122" x2="644" y2="122" stroke="#e2e6ea" stroke-width="2"/>
+
+    <!-- geometry column -->
+    <rect x="36" y="150" width="608" height="128" rx="10" fill="#f6f7f9" stroke="#c6ccd4" stroke-width="2"/>
+    <rect x="36" y="150" width="7" height="128" rx="3.5" fill="#9aa4b0"/>
+    <text class="col"  x="64" y="192">geometry</text>
+    <text class="colt" x="64" y="224">BYTE_ARRAY</text>
+    <text class="note" x="64" y="256">Opaque bytes. Parquet has no idea it is geospatial.</text>
+
+    <!-- bbox column -->
+    <rect x="36" y="300" width="608" height="128" rx="10" fill="#f6f7f9" stroke="#c6ccd4" stroke-width="2"/>
+    <rect x="36" y="300" width="7" height="128" rx="3.5" fill="#9aa4b0"/>
+    <text class="col"  x="64" y="342">bbox</text>
+    <text class="colt" x="64" y="374">STRUCT&lt;xmin, ymin, xmax, ymax&gt;</text>
+    <text class="note" x="64" y="406">An extra column, four doubles per row, just to filter.</text>
+
+    <!-- footer metadata -->
+    <rect x="36" y="458" width="608" height="212" rx="10" fill="#fff8e0" stroke="#d9a900" stroke-width="2.5"/>
+    <rect x="36" y="458" width="7" height="212" rx="3.5" fill="#FFD626"/>
+    <text class="tag"  x="64" y="496">FILE FOOTER — "geo" METADATA</text>
+    <text class="foot" x="64" y="534">CRS (PROJJSON)</text>
+    <text class="foot" x="64" y="564">encoding, edges, winding order, epoch</text>
+    <text class="foot" x="64" y="594">bbox of the whole file, covering, primary column</text>
+    <text class="note" x="64" y="636">Everything geospatial lives here. Drop this blob and</text>
+    <text class="note" x="64" y="660">the file is just numbers and bytes.</text>
+
+    <rect x="36" y="700" width="608" height="56" rx="28" fill="#1D232B"/>
+    <text class="kick" x="64" y="735">NEEDS A GEO-AWARE READER</text>
+  </g>
+
+  <!-- ============ ARROW ============ -->
+  <g transform="translate(772,430)">
+    <path d="M0 -14 H 36 V -34 L 76 0 L 36 34 V 14 H 0 Z" fill="#FFD626" stroke="#1D232B" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ============ RIGHT: GeoParquet 2.0 ============ -->
+  <g transform="translate(860,46)">
+    <rect x="0" y="0" width="680" height="790" rx="14" fill="#ffffff" stroke="#2126F7" stroke-width="3"/>
+
+    <text class="ttl" x="36" y="62">GeoParquet 2.0</text>
+    <text class="sub" x="36" y="96">Geospatial built into the Parquet format</text>
+    <line x1="36" y1="122" x2="644" y2="122" stroke="#e2e6ea" stroke-width="2"/>
+
+    <!-- geometry column -->
+    <rect x="36" y="150" width="608" height="278" rx="10" fill="#eef0fe" stroke="#2126F7" stroke-width="2.5"/>
+    <rect x="36" y="150" width="7" height="278" rx="3.5" fill="#2126F7"/>
+    <text class="col"  x="64" y="192">geometry</text>
+    <text class="colt" x="64" y="224">GEOMETRY / GEOGRAPHY</text>
+    <text class="note" x="64" y="256">A native Parquet logical type, still WKB-encoded.</text>
+    <line x1="64" y1="282" x2="616" y2="282" stroke="#c3c9f8" stroke-width="2"/>
+    <text class="foot" x="64" y="316">CRS travels on the column</text>
+    <text class="foot" x="64" y="346">edges: planar, spherical, vincenty, karney…</text>
+    <text class="foot" x="64" y="376">bounding box statistics per row group</text>
+    <text class="note" x="64" y="412">Spatial filtering with no extra columns.</text>
+
+    <!-- optional bbox -->
+    <rect x="36" y="450" width="608" height="92" rx="10" fill="#fafbfc" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="9 7"/>
+    <text class="col"  x="64" y="490">bbox <tspan class="note" font-weight="normal">— optional now</tspan></text>
+    <text class="note" x="64" y="520">Add it only for page-level pruning or older readers.</text>
+
+    <!-- footer metadata -->
+    <rect x="36" y="564" width="608" height="106" rx="10" fill="#f6f7f9" stroke="#c6ccd4" stroke-width="2"/>
+    <rect x="36" y="564" width="7" height="106" rx="3.5" fill="#9aa4b0"/>
+    <text class="tag"  x="64" y="602">FILE FOOTER — "geo" METADATA</text>
+    <text class="note" x="64" y="636">Still there, now a helper: guaranteed inline PROJJSON,</text>
+    <text class="note" x="64" y="660">winding order, epoch, primary geometry column.</text>
+
+    <rect x="36" y="700" width="608" height="56" rx="28" fill="#2126F7"/>
+    <text class="kick" x="64" y="735">ANY PARQUET READER SEES A GEOMETRY</text>
+  </g>
+</svg>
