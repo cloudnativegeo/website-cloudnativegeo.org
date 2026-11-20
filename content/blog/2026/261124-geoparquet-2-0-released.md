@@ -62,13 +62,13 @@ A few gaps are worth knowing about. GDAL can write native geospatial types from 
 
 ## Should you switch?
 
-For most people publishing data today, the answer is: not yet, and that's fine.
+For most people, we think the answer is yes — give it a go.
 
-GeoParquet 1.1 with a `bbox` covering column remains the right choice if you want the widest possible set of software to read your data, and the [distributing guide](https://github.com/opengeospatial/geoparquet/blob/v2.0.0/format-specs/distributing-geoparquet.md) says so explicitly. The large public datasets are still on 1.1 — Overture Maps, the biggest of them, ships GeoParquet 1.1 today. A 1.1 file written well is not a mistake you'll have to apologize for later.
+If your data is read by DuckDB, SedonaDB, Spark, GeoPandas, QGIS, or anything sitting on modern Arrow, GeoParquet 2.0 gets you smaller files with no `bbox` column, spatial filtering for free from row group statistics, and a geometry column that non-geospatial tooling can recognize as geospatial. That last point is the one that compounds. The whole bet of 2.0 is that "geospatial" stops being something you bolt on and becomes something the data warehouse already knows about, and the only way that happens is if there are 2.0 files out there to read.
 
-GeoParquet 2.0 is the right choice now if you control both ends of the pipe. If your data is read by DuckDB, SedonaDB, Spark, a recent GeoPandas, or anything sitting on modern Arrow, you get smaller files (no `bbox` column), spatial filtering for free from row group statistics, and a geometry column that non-geospatial tooling can at least recognize as geospatial. That last point is the one that compounds: the whole bet of 2.0 is that "geospatial" stops being a thing you bolt on and becomes a thing the data warehouse already knows about.
+The case for staying on 1.1 is reach. If you are publishing to the widest possible audience, and can't assume much about what will open your file, 1.1 with a `bbox` covering column is still the safer bet. It's what the large public datasets do today, Overture Maps included, and a well-written 1.1 file isn't a mistake you'll have to apologize for later.
 
-Either way, the guidance that actually determines whether your files are fast — zstd compression, spatial ordering, sensible row group sizes — is the same for 1.1 and 2.0. Get that right first.
+Whichever version you choose, the same things make a file fast. Use zstd compression, order the data spatially, and pick sensible row group sizes. Those matter more than the version number does.
 
 ## Thank you, and come help
 
