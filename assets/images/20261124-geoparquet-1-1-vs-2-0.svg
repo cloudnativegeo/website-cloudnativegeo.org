@@ -26,15 +26,14 @@
     <rect x="36" y="150" width="608" height="128" rx="10" fill="#f6f7f9" stroke="#c6ccd4" stroke-width="2"/>
     <rect x="36" y="150" width="7" height="128" rx="3.5" fill="#9aa4b0"/>
     <text class="col"  x="64" y="192">geometry</text>
-    <text class="colt" x="64" y="224">BYTE_ARRAY</text>
-    <text class="note" x="64" y="256">Opaque bytes. Parquet has no idea it is geospatial.</text>
+    <text class="colt" x="64" y="224">WKB BYTE_ARRAY or GeoArrow structs</text>
+    <text class="note" x="64" y="256">Plain columns. Parquet has no idea they are geospatial.</text>
 
     <!-- bbox column -->
-    <rect x="36" y="300" width="608" height="128" rx="10" fill="#f6f7f9" stroke="#c6ccd4" stroke-width="2"/>
-    <rect x="36" y="300" width="7" height="128" rx="3.5" fill="#9aa4b0"/>
-    <text class="col"  x="64" y="342">bbox</text>
+    <rect x="36" y="300" width="608" height="128" rx="10" fill="#fafbfc" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="9 7"/>
+    <text class="col"  x="64" y="342">bbox <tspan class="note" font-weight="normal">— optional</tspan></text>
     <text class="colt" x="64" y="374">STRUCT&lt;xmin, ymin, xmax, ymax&gt;</text>
-    <text class="note" x="64" y="406">An extra column, four doubles per row, just to filter.</text>
+    <text class="note" x="64" y="406">An extra column, four doubles per row, to filter rows.</text>
 
     <!-- footer metadata -->
     <rect x="36" y="458" width="608" height="212" rx="10" fill="#fff8e0" stroke="#d9a900" stroke-width="2.5"/>
@@ -42,7 +41,7 @@
     <text class="tag"  x="64" y="496">FILE FOOTER — "geo" METADATA</text>
     <text class="foot" x="64" y="534">CRS (PROJJSON)</text>
     <text class="foot" x="64" y="564">encoding, edges, winding order, epoch</text>
-    <text class="foot" x="64" y="594">bbox of the whole file, covering, primary column</text>
+    <text class="foot" x="64" y="594">bbox per geometry column, covering, primary column</text>
     <text class="note" x="64" y="636">Everything geospatial lives here. Drop this blob and</text>
     <text class="note" x="64" y="660">the file is just numbers and bytes.</text>
 
@@ -71,13 +70,13 @@
     <text class="note" x="64" y="256">A native Parquet logical type, still WKB-encoded.</text>
     <line x1="64" y1="282" x2="616" y2="282" stroke="#c3c9f8" stroke-width="2"/>
     <text class="foot" x="64" y="316">CRS travels on the column</text>
-    <text class="foot" x="64" y="346">edges: planar, spherical, vincenty, karney…</text>
+    <text class="foot" x="64" y="346">edges: planar (GEOMETRY), spherical… (GEOGRAPHY)</text>
     <text class="foot" x="64" y="376">bounding box statistics per row group</text>
     <text class="note" x="64" y="412">Spatial filtering with no extra columns.</text>
 
     <!-- optional bbox -->
     <rect x="36" y="450" width="608" height="92" rx="10" fill="#fafbfc" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="9 7"/>
-    <text class="col"  x="64" y="490">bbox <tspan class="note" font-weight="normal">— optional now</tspan></text>
+    <text class="col"  x="64" y="490">bbox <tspan class="note" font-weight="normal">— optional</tspan></text>
     <text class="note" x="64" y="520">Add it only for page-level pruning or older readers.</text>
 
     <!-- footer metadata -->
@@ -88,6 +87,6 @@
     <text class="note" x="64" y="660">winding order, epoch, primary geometry column.</text>
 
     <rect x="36" y="700" width="608" height="56" rx="28" fill="#2126F7"/>
-    <text class="kick" x="64" y="735">ANY PARQUET READER SEES A GEOMETRY</text>
+    <text class="kick" x="64" y="735">PARQUET 2.11+ READERS SEE A GEOMETRY</text>
   </g>
 </svg>
