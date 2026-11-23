@@ -33,7 +33,7 @@ The second is saying "I don't know." A file still needs a way to declare an unkn
 
 ## Publishing GeoParquet well
 
-The last piece of work in the spec repo isn't in the spec at all. It's a guide to [publishing GeoParquet data](https://github.com/opengeospatial/geoparquet/blob/v2.0.0/format-specs/distributing-geoparquet.md) that lives alongside it. Parquet gives a lot of options, so we made this to recommend some options that work well in most cases: zstd compression at level 15 or higher, spatially ordering the data within each file, row groups of roughly 50,000 to 150,000 rows, spatial partitioning once a dataset grows past a couple of gigabytes, and STAC metadata to describe the result. A companion guide shows [how to do all of that](https://github.com/opengeospatial/geoparquet/blob/v2.0.0/format-specs/distributing-geoparquet-tools.md) in GDAL, DuckDB, SedonaDB and geoparquet-io.
+The last piece of work in the spec repo isn't in the spec at all. It's a guide to [publishing GeoParquet data](https://github.com/opengeospatial/geoparquet/blob/v2.0.0/format-specs/distributing-geoparquet.md) that lives alongside it. Parquet gives a lot of options, so we made this to recommend some options that work well in most cases: zstd compression at level 15 or higher, spatially ordering the data within each file, row groups of roughly 50 000 to 150 000 rows, spatial partitioning once a dataset grows past a couple of gigabytes, and STAC metadata to describe the result. A companion guide shows [how to do all of that](https://github.com/opengeospatial/geoparquet/blob/v2.0.0/format-specs/distributing-geoparquet-tools.md) in GDAL, DuckDB, SedonaDB and geoparquet-io.
 
 ## Testing and validation
 
