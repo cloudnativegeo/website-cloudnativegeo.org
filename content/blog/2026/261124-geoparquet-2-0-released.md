@@ -1,5 +1,5 @@
 ---
-date: "2026-11-24T08:00:00-05:00"
+date: "2026-11-24T03:36:00-05:00"
 slug: geoparquet-2-0-released
 title: "GeoParquet 2.0 Released"
 tags: []
